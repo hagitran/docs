@@ -1,0 +1,196 @@
+import { useState, useEffect } from 'react';
+
+export const WhetInputDemo = ({ apiKey }) => {
+  const [text, setText] = useState('');
+  const [nudges, setNudges] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+// Simulate AI nudges based on text input
+useEffect(() => {
+if (!text.trim() || !apiKey) return;
+
+    setIsProcessing(true);
+    const timer = setTimeout(() => {
+      const mockNudges = [];
+
+      if (text.length < 10) {
+        mockNudges.push({
+          id: 'length',
+          type: 'suggestion',
+          message: 'Consider adding more descriptive details',
+          confidence: 0.8
+        });
+      }
+
+      if (!text.includes('premium') && !text.includes('quality')) {
+        mockNudges.push({
+          id: 'quality',
+          type: 'suggestion',
+          message: 'Highlight quality or premium features',
+          confidence: 0.7
+        });
+      }
+
+      if (text.toLowerCase().includes('red mug')) {
+        mockNudges.push({
+          id: 'specific',
+          type: 'info',
+          message: 'Great! Specific product details help customers',
+          confidence: 0.9
+        });
+      }
+
+      setNudges(mockNudges);
+      setIsProcessing(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+
+}, [text, apiKey]);
+
+if (!apiKey) {
+return (
+<div style={{
+        padding: '12px',
+        backgroundColor: '#27272a',
+        borderRadius: '6px',
+        border: '1px solid #3f3f46',
+        fontSize: '14px',
+        color: '#d1d5db'
+      }}>
+Create an API key above to try the live demo.
+</div>
+);
+}
+
+return (
+<div style={{
+      padding: '24px',
+      backgroundColor: '#18181b',
+      borderRadius: '8px',
+      border: '1px solid #27272a',
+      marginBottom: '24px'
+    }}>
+<h3 style={{ color: '#ffffff', marginBottom: '16px', fontSize: '20px' }}>
+🧪 Test WhetInput Component
+</h3>
+<p style={{ color: '#a1a1aa', marginBottom: '16px' }}>
+Try typing in the input below to see AI-powered nudges in action:
+</p>
+
+      <div style={{ position: 'relative' }}>
+        <label style={{
+          display: 'block',
+          fontSize: '14px',
+          fontWeight: '500',
+          color: '#d1d5db',
+          marginBottom: '8px'
+        }}>
+          Product Description
+        </label>
+        <textarea
+          placeholder="Describe your red mug idea..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '12px',
+            backgroundColor: '#27272a',
+            border: '1px solid #3f3f46',
+            borderRadius: '6px',
+            color: '#ffffff',
+            outline: 'none',
+            resize: 'vertical',
+            minHeight: '100px',
+            fontFamily: 'inherit'
+          }}
+        />
+
+        {isProcessing && (
+          <div style={{
+            position: 'absolute',
+            top: '40px',
+            right: '12px',
+            color: '#60a5fa',
+            fontSize: '12px'
+          }}>
+            AI analyzing...
+          </div>
+        )}
+      </div>
+
+      {nudges.length > 0 && (
+        <div style={{ marginTop: '12px' }}>
+          <h4 style={{
+            fontSize: '14px',
+            fontWeight: '500',
+            color: '#60a5fa',
+            marginBottom: '8px'
+          }}>
+            💡 AI Suggestions:
+          </h4>
+          {nudges.map((nudge) => (
+            <div
+              key={nudge.id}
+              style={{
+                padding: '8px 12px',
+                backgroundColor: nudge.type === 'info' ? '#1e40af20' : '#059669',
+                border: `1px solid ${nudge.type === 'info' ? '#3b82f6' : '#10b981'}`,
+                borderRadius: '6px',
+                marginBottom: '8px',
+                fontSize: '13px',
+                color: nudge.type === 'info' ? '#93c5fd' : '#d1fae5'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>{nudge.message}</span>
+                <span style={{
+                  fontSize: '11px',
+                  opacity: 0.7,
+                  marginLeft: 'auto'
+                }}>
+                  {Math.round(nudge.confidence * 100)}% confidence
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{
+        marginTop: '16px',
+        padding: '12px',
+        backgroundColor: '#27272a',
+        borderRadius: '6px',
+        border: '1px solid #3f3f46'
+      }}>
+        <p style={{
+          fontSize: '12px',
+          fontWeight: '500',
+          color: '#60a5fa',
+          marginBottom: '8px'
+        }}>
+          📦 How Users Integrate This:
+        </p>
+        <pre style={{
+          fontSize: '11px',
+          color: '#d1d5db',
+          backgroundColor: '#18181b',
+          padding: '8px',
+          borderRadius: '4px',
+          overflow: 'auto',
+          margin: 0
+        }}>{`import { WhetInput } from '@whetdata/input';
+
+<WhetInput
+  value={text}
+  onChange={setText}
+  placeholder="Describe your product..."
+  target="product_description"
+  nudgePackId="ecommerce_optimization"
+  onNudges={(nudges) => console.log(nudges)}
+/>`}</pre>
+      </div>
+    </div>
+  );
+};

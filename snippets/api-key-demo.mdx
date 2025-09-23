@@ -1,0 +1,235 @@
+import { useState, useCallback } from 'react';
+
+export const ApiKeyDemo = () => {
+  const [keyName, setKeyName] = useState('');
+  const [apiKey, setApiKey] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [showKey, setShowKey] = useState(false);
+  const [stats, setStats] = useState(null);
+
+const createApiKey = useCallback(async () => {
+if (!keyName.trim()) {
+setMessage({ type: 'error', text: 'Please enter a name for your API key' });
+return;
+}
+
+    setIsCreating(true);
+    setMessage(null);
+
+    // Simulate API call
+    setTimeout(() => {
+      const mockApiKey = `whet_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+      const mockStats = {
+        dailyLimit: 1000,
+        monthlyLimit: 30000,
+        dailyRemaining: 1000,
+        monthlyRemaining: 30000,
+        requestsToday: 0,
+        requestsThisMonth: 0
+      };
+
+      setApiKey(mockApiKey);
+      setStats(mockStats);
+      setMessage({ type: 'success', text: 'API key created successfully!' });
+      setIsCreating(false);
+    }, 1500);
+
+}, [keyName]);
+
+const copyToClipboard = useCallback(async () => {
+try {
+await navigator.clipboard.writeText(apiKey);
+setMessage({ type: 'success', text: 'API key copied to clipboard!' });
+} catch (error) {
+setMessage({ type: 'error', text: 'Failed to copy API key' });
+}
+}, [apiKey]);
+
+return (
+<div style={{
+      padding: '24px',
+      backgroundColor: '#18181b',
+      borderRadius: '8px',
+      border: '1px solid #27272a',
+      marginBottom: '24px'
+    }}>
+<h3 style={{ color: '#ffffff', marginBottom: '16px', fontSize: '20px' }}>
+🔑 Create Your API Key
+</h3>
+<p style={{ color: '#a1a1aa', marginBottom: '16px' }}>
+Generate a new API key to start using Whetdata's services
+</p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <input
+          type="text"
+          placeholder="Enter API key name (e.g., 'My App')"
+          value={keyName}
+          onChange={(e) => setKeyName(e.target.value)}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            backgroundColor: '#27272a',
+            border: '1px solid #3f3f46',
+            borderRadius: '6px',
+            color: '#ffffff',
+            outline: 'none'
+          }}
+          onKeyDown={(e) => e.key === 'Enter' && createApiKey()}
+        />
+        <button
+          onClick={createApiKey}
+          disabled={isCreating || !keyName.trim()}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: isCreating || !keyName.trim() ? '#4b5563' : '#2563eb',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: isCreating || !keyName.trim() ? 'not-allowed' : 'pointer',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          {isCreating ? 'Creating...' : 'Create API Key'}
+        </button>
+      </div>
+
+      {message && (
+        <div style={{
+          color: message.type === 'success' ? '#22c55e' : message.type === 'error' ? '#ef4444' : '#a1a1aa',
+          fontSize: '14px',
+          marginBottom: '16px'
+        }}>
+          {message.text}
+        </div>
+      )}
+
+      {apiKey && (
+        <div style={{ marginTop: '16px' }}>
+          <div style={{
+            padding: '12px',
+            backgroundColor: '#27272a',
+            borderRadius: '6px',
+            border: '1px solid #3f3f46',
+            marginBottom: '12px'
+          }}>
+            <label style={{
+              display: 'block',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#d1d5db',
+              marginBottom: '4px'
+            }}>
+              Your API Key:
+            </label>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <input
+                type={showKey ? 'text' : 'password'}
+                readOnly
+                value={apiKey}
+                style={{
+                  flex: 1,
+                  padding: '4px 8px',
+                  backgroundColor: '#18181b',
+                  color: '#22c55e',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
+                  border: 'none',
+                  outline: 'none'
+                }}
+              />
+              <button
+                onClick={() => setShowKey(!showKey)}
+                style={{
+                  padding: '4px 12px',
+                  backgroundColor: '#3f3f46',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                {showKey ? 'Hide' : 'Show'}
+              </button>
+              <button
+                onClick={copyToClipboard}
+                style={{
+                  padding: '4px 12px',
+                  backgroundColor: '#3f3f46',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          {stats && (
+            <div style={{
+              padding: '12px',
+              backgroundColor: '#27272a',
+              borderRadius: '6px',
+              border: '1px solid #3f3f46'
+            }}>
+              <h4 style={{
+                fontSize: '14px',
+                fontWeight: '500',
+                color: '#ffffff',
+                marginBottom: '8px'
+              }}>
+                Usage Statistics:
+              </h4>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '16px',
+                fontSize: '14px'
+              }}>
+                <div>
+                  <span style={{ color: '#a1a1aa' }}>Daily Limit:</span>
+                  <span style={{ color: '#ffffff', marginLeft: '4px' }}>
+                    {stats.dailyLimit.toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: '#a1a1aa' }}>Daily Remaining:</span>
+                  <span style={{ color: '#22c55e', marginLeft: '4px' }}>
+                    {stats.dailyRemaining.toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: '#a1a1aa' }}>Monthly Limit:</span>
+                  <span style={{ color: '#ffffff', marginLeft: '4px' }}>
+                    {stats.monthlyLimit.toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: '#a1a1aa' }}>Monthly Remaining:</span>
+                  <span style={{ color: '#22c55e', marginLeft: '4px' }}>
+                    {stats.monthlyRemaining.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+              <div style={{
+                marginTop: '8px',
+                fontSize: '12px',
+                color: '#6b7280'
+              }}>
+                <span style={{ color: '#a1a1aa' }}>Requests Today:</span> {stats.requestsToday} |
+                <span style={{ color: '#a1a1aa', marginLeft: '4px' }}>This Month:</span> {stats.requestsThisMonth}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+
+);
+};

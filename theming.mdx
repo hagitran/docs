@@ -3,9 +3,17 @@ title: "Theming"
 description: "Customize the appearance of WhetInput components with flexible theming options"
 ---
 
+import { ThemeDemo } from "/snippets/theme-demo.mdx";
+
 ## Overview
 
 WhetInput supports a comprehensive theming system that allows you to match your application's design perfectly. You can use predefined themes, follow system preferences, or create completely custom themes with your own design tokens.
+
+## Interactive Theme Demo
+
+See how different themes work in real-time:
+
+<ThemeDemo apiKey="" />
 
 ## Theme Modes
 
@@ -17,16 +25,19 @@ WhetInput supports several appearance modes for different use cases:
   </Card>
 
 {" "}
+
 <Card title="Light" icon="sun">
   Forces light theme regardless of system preference
 </Card>
 
 {" "}
+
 <Card title="Dark" icon="moon">
   Forces dark theme regardless of system preference
 </Card>
 
 {" "}
+
 <Card title="Auto" icon="circle-half-stroke">
   Automatically follows system preference
 </Card>
@@ -344,6 +355,7 @@ function ThemeSwitcher() {
   </Accordion>
 
 {" "}
+
 <Accordion title="Design Token Guidelines">
   - Keep color contrast ratios accessible (WCAG AA minimum) - Use semantic color
   names (primary, success, error) - Test themes in both light and dark

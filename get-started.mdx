@@ -3,6 +3,9 @@ title: "Get Started"
 description: "Start building with Whetdata's AI-powered input component"
 ---
 
+import { ApiKeyDemo } from "/snippets/api-key-demo.mdx";
+import { WhetInputDemo } from "/snippets/whet-input-demo.mdx";
+
 ## Quick Start
 
 Get up and running with Whetdata in minutes. Our AI-powered input component provides intelligent text cleaning and real-time suggestions.
@@ -243,6 +246,14 @@ const handleNudges = (nudges, meta) => {
 />;
 ```
 
+## Interactive Demo
+
+Try creating an API key and testing the WhetInput component:
+
+<ApiKeyDemo />
+
+<WhetInputDemo apiKey="" />
+
 ## Features
 
 <CardGroup cols={2}>
@@ -251,21 +262,25 @@ const handleNudges = (nudges, meta) => {
   </Card>
 
 {" "}
+
 <Card title="Flexible theming" icon="palette">
   Light/dark themes with custom token support
 </Card>
 
 {" "}
+
 <Card title="Real-time suggestions" icon="bolt">
   Live nudges as users type
 </Card>
 
 {" "}
+
 <Card title="TypeScript support" icon="code">
   Full type safety and IntelliSense
 </Card>
 
 {" "}
+
 <Card title="Accessibility" icon="universal-access">
   WCAG compliant with keyboard navigation
 </Card>
@@ -284,6 +299,7 @@ const handleNudges = (nudges, meta) => {
   </Step>
 
 {" "}
+
 <Step title="Learn about theming">
   Dive deeper into [theming options](/theming) for customizing appearance.
 </Step>
