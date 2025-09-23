@@ -1,0 +1,458 @@
+---
+title: "API Reference"
+description: "Complete API reference for Whetdata components"
+---
+
+## WhetdataProvider
+
+The provider component that wraps your app and provides configuration to all WhetInput components.
+
+### Props
+
+<ParamField path="config" type="WhetdataConfig" required>
+  Configuration object for the Whetdata service.
+</ParamField>
+
+<ParamField path="children" type="React.ReactNode" required>
+  Child components that will have access to the Whetdata context.
+</ParamField>
+
+### Configuration Interface
+
+<ParamField path="apiKey" type="string" required>
+  Your Whetdata API key. Get one from the
+  [dashboard](https://whetdata.com/dashboard).
+</ParamField>
+
+<ParamField path="baseUrl" type="string">
+  API base URL. Auto-detected in production, defaults to localhost for
+  development.
+</ParamField>
+
+<ParamField path="timeout" type="number">
+  Request timeout in milliseconds. Default: `10000`.
+</ParamField>
+
+<ParamField path="region" type="'us' | 'eu'">
+  API region. Default: `'us'`.
+</ParamField>
+
+<ParamField path="enablePIIMasking" type="boolean">
+  Mask personally identifiable information in requests. Default: `true`.
+</ParamField>
+
+<ParamField path="allowLogging" type="boolean">
+  Allow request logging for debugging. Default: `false`.
+</ParamField>
+
+<ParamField path="maxTextLength" type="number">
+  Maximum text length for processing. Default: `5000`.
+</ParamField>
+
+<ParamField path="debounceMs" type="number">
+  Debounce delay for live mode. Default: `300`.
+</ParamField>
+
+<ParamField path="mode" type="'live' | 'blur' | 'hybrid'">
+  Default input mode. Default: `'live'`.
+</ParamField>
+
+<ParamField path="enableAnalytics" type="boolean">
+  Enable usage analytics. Default: `false`.
+</ParamField>
+
+## WhetInput
+
+The main input component with AI-powered text cleaning and suggestions.
+
+### Props
+
+<ParamField path="value" type="string" required>
+  Current text value.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string) => void" required>
+  Callback function called when the text value changes.
+</ParamField>
+
+<ParamField path="target" type="string" required>
+  Target field type for AI processing. Common values: - `'product_description'`
+  - Product descriptions - `'email'` - Email content - `'title'` - Titles and
+  headings - `'content'` - General content - `'bio'` - User bios - `'comment'` -
+  Comments and reviews
+</ParamField>
+
+<ParamField path="nudgePackId" type="string" required>
+  Nudge pack identifier that determines the type of AI suggestions. Available
+  packs: - `'ecommerce_optimization'` - E-commerce content optimization -
+  `'professional_writing'` - Professional writing improvement -
+  `'creative_writing'` - Creative content enhancement - `'technical_writing'` -
+  Technical documentation - `'social_media'` - Social media content
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text displayed when the input is empty.
+</ParamField>
+
+<ParamField path="goal" type="string">
+  Optional goal description to help AI provide more targeted suggestions.
+</ParamField>
+
+<ParamField path="rows" type="number">
+  Number of rows for textarea mode. Default: `1` (single line input).
+</ParamField>
+
+<ParamField path="mode" type="'live' | 'blur' | 'hybrid'">
+  Input mode behavior: - `'live'` - Real-time suggestions as user types -
+  `'blur'` - Suggestions only when input loses focus - `'hybrid'` - Live
+  suggestions with debouncing
+</ParamField>
+
+<ParamField path="appearance" type="'inherit' | 'light' | 'dark' | 'tokens'">
+  Visual appearance mode: - `'inherit'` - Follows parent context or system
+  preference - `'light'` - Forces light theme - `'dark'` - Forces dark theme -
+  `'tokens'` - Uses custom theme tokens
+</ParamField>
+
+<ParamField path="theme" type="'light' | 'dark' | 'auto'">
+  Theme preference when using inherit mode: - `'light'` - Light theme - `'dark'`
+  - Dark theme - `'auto'` - Follows system preference
+</ParamField>
+
+<ParamField path="styleTokens" type="ThemeTokens">
+  Custom theme tokens for styling. Only used when `appearance="tokens"`.
+</ParamField>
+
+<ParamField path="onNudges" type="(nudges: Nudge[], meta: NudgeMeta) => void">
+  Callback function called when AI nudges are received.
+</ParamField>
+
+<ParamField path="onError" type="(error: WhetdataError) => void">
+  Callback function called when an error occurs.
+</ParamField>
+
+<ParamField path="onApply" type="(nudgeId: string, actionId: string) => void">
+  Callback function called when a nudge is applied.
+</ParamField>
+
+## ThemeProvider
+
+Optional provider component for global theme management.
+
+### Props
+
+<ParamField path="defaultTheme" type="'light' | 'dark' | 'auto'">
+  Default theme for child components. Default: `'auto'`.
+</ParamField>
+
+<ParamField path="children" type="React.ReactNode" required>
+  Child components that will inherit the theme.
+</ParamField>
+
+## Type Definitions
+
+### WhetdataConfig
+
+```typescript
+interface WhetdataConfig {
+  apiKey: string;
+  baseUrl?: string;
+  timeout?: number;
+  region?: "us" | "eu";
+  enablePIIMasking?: boolean;
+  allowLogging?: boolean;
+  maxTextLength?: number;
+  debounceMs?: number;
+  mode?: "live" | "blur" | "hybrid";
+  enableAnalytics?: boolean;
+}
+```
+
+### ThemeTokens
+
+```typescript
+interface ThemeTokens {
+  // Color tokens
+  primary?: string;
+  secondary?: string;
+  background?: string;
+  surface?: string;
+  text?: string;
+  textSecondary?: string;
+  border?: string;
+  borderHover?: string;
+  focus?: string;
+
+  // State colors
+  success?: string;
+  warning?: string;
+  error?: string;
+  info?: string;
+
+  // Interactive states
+  hover?: string;
+  active?: string;
+  disabled?: string;
+
+  // Layout tokens
+  borderRadius?: string;
+  focusRingThickness?: string;
+  nudgePanelGap?: string;
+  nudgePanelZIndex?: number;
+  nudgePanelShadow?: string;
+  nudgeChipPadding?: string;
+  nudgeChipGap?: string;
+}
+```
+
+### Nudge
+
+```typescript
+interface Nudge {
+  id: string;
+  type: "suggestion" | "warning" | "error";
+  severity: "info" | "warning" | "block";
+  message: string;
+  actions: NudgeAction[];
+  confidence: number;
+  position: {
+    start: number;
+    end: number;
+  };
+}
+```
+
+### NudgeAction
+
+```typescript
+interface NudgeAction {
+  id: string;
+  label: string;
+  type: "replace" | "insert" | "delete";
+  value?: string;
+  position?: number;
+}
+```
+
+### NudgeMeta
+
+```typescript
+interface NudgeMeta {
+  confidence: number;
+  latency: number;
+  timestamp: number;
+  requestId: string;
+}
+```
+
+### WhetdataError
+
+```typescript
+interface WhetdataError {
+  code: string;
+  message: string;
+  details?: any;
+  retryAfter?: number;
+}
+```
+
+## Error Codes
+
+<ParamField path="auth_failed" type="string">
+  Invalid or missing API key.
+</ParamField>
+
+<ParamField path="rate_limited" type="string">
+  API rate limit exceeded. Check `retryAfter` for when to retry.
+</ParamField>
+
+<ParamField path="network_timeout" type="string">
+  Request timed out. Check your network connection.
+</ParamField>
+
+<ParamField path="invalid_target" type="string">
+  Invalid target field type specified.
+</ParamField>
+
+<ParamField path="invalid_nudge_pack" type="string">
+  Invalid nudge pack ID specified.
+</ParamField>
+
+<ParamField path="text_too_long" type="string">
+  Text exceeds maximum length limit.
+</ParamField>
+
+<ParamField path="quota_exceeded" type="string">
+  API quota exceeded for your plan.
+</ParamField>
+
+## API Endpoints
+
+The Whetdata service provides the following REST API endpoints:
+
+<ParamField path="POST /clean" type="string">
+  Clean and improve text content.
+</ParamField>
+
+<ParamField path="POST /ult" type="string">
+  Validate text and fetch AI suggestions.
+</ParamField>
+
+### Request Format
+
+```json
+{
+  "text": "user input text",
+  "target": "product_description",
+  "nudgePackId": "ecommerce_optimization",
+  "goal": "Create compelling product descriptions",
+  "lang": "en",
+  "locale": "US"
+}
+```
+
+### Response Format
+
+```json
+{
+  "success": true,
+  "nudges": [
+    {
+      "id": "nudge_1",
+      "type": "suggestion",
+      "severity": "info",
+      "message": "Consider adding more descriptive details",
+      "actions": [
+        {
+          "id": "action_1",
+          "label": "Add details",
+          "type": "insert",
+          "value": " with premium materials",
+          "position": 15
+        }
+      ],
+      "confidence": 0.85,
+      "position": {
+        "start": 10,
+        "end": 25
+      }
+    }
+  ],
+  "meta": {
+    "confidence": 0.85,
+    "latency": 150,
+    "timestamp": 1640995200000,
+    "requestId": "req_123"
+  }
+}
+```
+
+## Examples
+
+### Basic Usage
+
+```tsx
+import { WhetdataProvider, WhetInput } from "@whetdata/input";
+
+function App() {
+  const [text, setText] = useState("");
+
+  return (
+    <WhetdataProvider
+      config={{
+        apiKey: "your-api-key",
+        enablePIIMasking: true,
+      }}
+    >
+      <WhetInput
+        value={text}
+        onChange={setText}
+        placeholder="Describe your product..."
+        target="product_description"
+        nudgePackId="ecommerce_optimization"
+        goal="Create compelling product descriptions"
+      />
+    </WhetdataProvider>
+  );
+}
+```
+
+### Advanced Configuration
+
+```tsx
+import { WhetdataProvider, WhetInput, ThemeProvider } from "@whetdata/input";
+
+function App() {
+  const [text, setText] = useState("");
+
+  const config = {
+    apiKey: "your-api-key",
+    baseUrl: "https://api.whetdata.com",
+    timeout: 15000,
+    region: "us",
+    enablePIIMasking: true,
+    allowLogging: false,
+    maxTextLength: 10000,
+    debounceMs: 500,
+    mode: "hybrid",
+    enableAnalytics: true,
+  };
+
+  return (
+    <ThemeProvider defaultTheme="auto">
+      <WhetdataProvider config={config}>
+        <WhetInput
+          value={text}
+          onChange={setText}
+          placeholder="Write your content..."
+          target="content"
+          nudgePackId="professional_writing"
+          goal="Create engaging and professional content"
+          rows={5}
+          mode="live"
+          appearance="inherit"
+          onNudges={(nudges, meta) => {
+            console.log("Received nudges:", nudges);
+            console.log("Confidence:", meta.confidence);
+          }}
+          onError={(error) => {
+            console.error("Error:", error);
+          }}
+        />
+      </WhetdataProvider>
+    </ThemeProvider>
+  );
+}
+```
+
+### Custom Theming
+
+```tsx
+import { WhetInput } from "@whetdata/input";
+
+function CustomThemedInput() {
+  const [text, setText] = useState("");
+
+  const customTokens = {
+    primary: "#8b5cf6",
+    background: "#ffffff",
+    text: "#1e293b",
+    border: "#e2e8f0",
+    borderRadius: "0.75rem",
+    focus: "#8b5cf6",
+    hover: "#f3f4f6",
+  };
+
+  return (
+    <WhetInput
+      value={text}
+      onChange={setText}
+      placeholder="Custom themed input..."
+      target="content"
+      nudgePackId="creative_writing"
+      appearance="tokens"
+      styleTokens={customTokens}
+    />
+  );
+}
+```

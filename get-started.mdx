@@ -1,0 +1,300 @@
+---
+title: "Get Started"
+description: "Start building with Whetdata's AI-powered input component"
+---
+
+## Quick Start
+
+Get up and running with Whetdata in minutes. Our AI-powered input component provides intelligent text cleaning and real-time suggestions.
+
+<Steps>
+  <Step title="Install the package">
+    ```bash
+    npm install @whetdata/input
+    ```
+  </Step>
+  
+  <Step title="Create an API key">
+    Sign up at [whetdata.com](https://whetdata.com) and create your first API key from the dashboard.
+  </Step>
+  
+  <Step title="Add to your app">
+    ```tsx
+    import { WhetdataProvider, WhetInput } from '@whetdata/input';
+    
+    function MyApp() {
+      const [text, setText] = useState('');
+      
+      return (
+        <WhetdataProvider config={{
+          apiKey: 'your-api-key-here',
+          enablePIIMasking: true,
+          enableAnalytics: true
+        }}>
+          <WhetInput
+            value={text}
+            onChange={setText}
+            placeholder="Describe your product..."
+            target="product_description"
+            nudgePackId="ecommerce_optimization"
+            goal="Create compelling product descriptions"
+          />
+        </WhetdataProvider>
+      );
+    }
+    ```
+  </Step>
+</Steps>
+
+## Basic Configuration
+
+The `WhetdataProvider` component accepts a configuration object with the following options:
+
+<ParamField path="apiKey" type="string" required>
+  Your Whetdata API key. Get one from the
+  [dashboard](https://whetdata.com/dashboard).
+</ParamField>
+
+<ParamField path="baseUrl" type="string">
+  API base URL. Auto-detected in production, defaults to localhost for
+  development.
+</ParamField>
+
+<ParamField path="enablePIIMasking" type="boolean">
+  Mask personally identifiable information in requests. Default: `true`.
+</ParamField>
+
+<ParamField path="enableAnalytics" type="boolean">
+  Enable usage analytics. Default: `false`.
+</ParamField>
+
+<ParamField path="timeout" type="number">
+  Request timeout in milliseconds. Default: `10000`.
+</ParamField>
+
+<ParamField path="region" type="'us' | 'eu'">
+  API region. Default: `'us'`.
+</ParamField>
+
+## WhetInput Component
+
+The main input component with AI-powered features:
+
+<ParamField path="value" type="string" required>
+  Current text value.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string) => void" required>
+  Callback when text changes.
+</ParamField>
+
+<ParamField path="target" type="string" required>
+  Target field type (e.g., 'product_description', 'email', 'title').
+</ParamField>
+
+<ParamField path="nudgePackId" type="string" required>
+  Nudge pack identifier for AI suggestions.
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text.
+</ParamField>
+
+<ParamField path="goal" type="string">
+  Optional goal description for better AI suggestions.
+</ParamField>
+
+<ParamField path="rows" type="number">
+  Number of rows for textarea. Default: `1`.
+</ParamField>
+
+<ParamField path="mode" type="'live' | 'blur' | 'hybrid'">
+  Input mode. Default: `'live'`.
+</ParamField>
+
+## Theming
+
+WhetInput supports flexible theming with multiple appearance modes:
+
+<CodeGroup>
+
+```tsx Theme Modes
+// Inherit from parent context
+<WhetInput appearance="inherit" ... />
+
+// Force light theme
+<WhetInput appearance="light" ... />
+
+// Force dark theme
+<WhetInput appearance="dark" ... />
+
+// Follow system preference
+<WhetInput theme="auto" ... />
+```
+
+```tsx Custom Theme Tokens
+<WhetInput
+  appearance="tokens"
+  styleTokens={{
+    primary: '#8b5cf6',
+    background: '#ffffff',
+    text: '#1e293b',
+    border: '#e2e8f0',
+    borderRadius: '0.75rem'
+  }}
+  ...
+/>
+```
+
+```tsx Theme Provider
+import { ThemeProvider } from '@whetdata/input';
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="auto">
+      <WhetInput ... /> {/* Inherits theme */}
+      <WhetInput appearance="light" ... /> {/* Override to light */}
+    </ThemeProvider>
+  );
+}
+```
+
+</CodeGroup>
+
+## Advanced Usage
+
+### Multiple Inputs
+
+```tsx
+function ProductForm() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  return (
+    <WhetdataProvider config={{ apiKey: "your-key" }}>
+      <WhetInput
+        value={title}
+        onChange={setTitle}
+        placeholder="Product title..."
+        target="product_title"
+        nudgePackId="ecommerce_optimization"
+      />
+
+      <WhetInput
+        value={description}
+        onChange={setDescription}
+        placeholder="Product description..."
+        target="product_description"
+        nudgePackId="ecommerce_optimization"
+        rows={4}
+        mode="blur"
+      />
+    </WhetdataProvider>
+  );
+}
+```
+
+### Error Handling
+
+```tsx
+const handleError = (error) => {
+  switch (error.code) {
+    case "auth_failed":
+      console.error("Invalid API key");
+      break;
+    case "rate_limited":
+      console.error("Rate limited. Retry after:", error.retryAfter);
+      break;
+    case "network_timeout":
+      console.error("Network timeout");
+      break;
+    default:
+      console.error("Unknown error:", error);
+  }
+};
+
+<WhetInput
+  // ... other props
+  onError={handleError}
+/>;
+```
+
+### Nudge Handling
+
+```tsx
+const handleNudges = (nudges, meta) => {
+  console.log("Received nudges:", nudges);
+  console.log("Confidence score:", meta.confidence);
+  console.log("Processing time:", meta.latency + "ms");
+
+  nudges.forEach((nudge) => {
+    if (nudge.severity === "block") {
+      showError(nudge.message);
+    }
+  });
+};
+
+<WhetInput
+  // ... other props
+  onNudges={handleNudges}
+  onApply={(nudgeId, actionId) => {
+    console.log("Applied nudge:", nudgeId, actionId);
+  }}
+/>;
+```
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="AI-powered text cleaning" icon="sparkles">
+    Intelligent text improvement with real-time suggestions
+  </Card>
+
+{" "}
+<Card title="Flexible theming" icon="palette">
+  Light/dark themes with custom token support
+</Card>
+
+{" "}
+<Card title="Real-time suggestions" icon="bolt">
+  Live nudges as users type
+</Card>
+
+{" "}
+<Card title="TypeScript support" icon="code">
+  Full type safety and IntelliSense
+</Card>
+
+{" "}
+<Card title="Accessibility" icon="universal-access">
+  WCAG compliant with keyboard navigation
+</Card>
+
+  <Card title="Easy integration" icon="plug">
+    Drop-in component with minimal setup
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<Steps>
+  <Step title="Explore the API reference">
+    Check out the [API documentation](/api-reference) for detailed component
+    props and methods.
+  </Step>
+
+{" "}
+<Step title="Learn about theming">
+  Dive deeper into [theming options](/theming) for customizing appearance.
+</Step>
+
+  <Step title="Join the community">
+    Get help and share feedback in our [Discord
+    community](https://discord.gg/whetdata).
+  </Step>
+</Steps>
+
+<Note>
+  **Need help?** Check out our [FAQ](/faq) or [contact
+  support](mailto:support@whetdata.com).
+</Note>

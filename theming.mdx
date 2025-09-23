@@ -1,0 +1,377 @@
+---
+title: "Theming"
+description: "Customize the appearance of WhetInput components with flexible theming options"
+---
+
+## Overview
+
+WhetInput supports a comprehensive theming system that allows you to match your application's design perfectly. You can use predefined themes, follow system preferences, or create completely custom themes with your own design tokens.
+
+## Theme Modes
+
+WhetInput supports several appearance modes for different use cases:
+
+<CardGroup cols={2}>
+  <Card title="Inherit" icon="arrow-down">
+    Follows the parent context or system preference
+  </Card>
+
+  <Card title="Light" icon="sun">
+    Forces light theme regardless of system preference
+  </Card>
+
+  <Card title="Dark" icon="moon">
+    Forces dark theme regardless of system preference
+  </Card>
+
+  <Card title="Auto" icon="circle-half-stroke">
+    Automatically follows system preference
+  </Card>
+
+  <Card title="Tokens" icon="palette">
+    Uses custom theme tokens for complete control
+  </Card>
+</CardGroup>
+
+## Basic Theme Usage
+
+### Inherit Mode (Default)
+
+```tsx
+// Inherits theme from parent context
+<WhetInput appearance="inherit" ... />
+
+// Or explicitly set to follow system preference
+<WhetInput theme="auto" ... />
+```
+
+### Force Specific Themes
+
+```tsx
+// Force light theme
+<WhetInput appearance="light" ... />
+
+// Force dark theme
+<WhetInput appearance="dark" ... />
+```
+
+### System Preference Detection
+
+```tsx
+// Automatically follows system preference
+<WhetInput theme="auto" ... />
+```
+
+## Theme Provider
+
+Use the `ThemeProvider` component to set a default theme for all child components:
+
+```tsx
+import { ThemeProvider, WhetInput } from '@whetdata/input';
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="auto">
+      <WhetInput ... /> {/* Inherits auto theme */}
+      <WhetInput appearance="light" ... /> {/* Override to light */}
+      <WhetInput appearance="dark" ... /> {/* Override to dark */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Custom Theme Tokens
+
+For complete design control, use the `tokens` appearance mode with custom theme tokens:
+
+### Basic Custom Theme
+
+```tsx
+const customTokens = {
+  primary: '#8b5cf6',
+  background: '#ffffff',
+  text: '#1e293b',
+  border: '#e2e8f0',
+  borderRadius: '0.75rem'
+};
+
+<WhetInput
+  appearance="tokens"
+  styleTokens={customTokens}
+  ...
+/>
+```
+
+### Complete Theme Token Interface
+
+```typescript
+interface ThemeTokens {
+  // Color tokens
+  primary?: string; // Primary accent color
+  secondary?: string; // Secondary accent color
+  background?: string; // Background color
+  surface?: string; // Surface color for panels
+  text?: string; // Primary text color
+  textSecondary?: string; // Secondary text color
+  border?: string; // Border color
+  borderHover?: string; // Border color on hover
+  focus?: string; // Focus ring color
+
+  // State colors
+  success?: string; // Success state color
+  warning?: string; // Warning state color
+  error?: string; // Error state color
+  info?: string; // Info state color
+
+  // Interactive states
+  hover?: string; // Hover state color
+  active?: string; // Active state color
+  disabled?: string; // Disabled state color
+
+  // Layout tokens
+  borderRadius?: string; // Border radius
+  focusRingThickness?: string; // Focus ring thickness
+  nudgePanelGap?: string; // Gap between nudge panel and input
+  nudgePanelZIndex?: number; // Z-index for nudge panel
+  nudgePanelShadow?: string; // Shadow for nudge panel
+  nudgeChipPadding?: string; // Padding for nudge chips
+  nudgeChipGap?: string; // Gap between nudge chips
+}
+```
+
+## Theme Examples
+
+### Brand Colors
+
+```tsx
+// Purple brand theme
+const purpleTheme = {
+  primary: '#8b5cf6',
+  background: '#ffffff',
+  text: '#1e293b',
+  border: '#e2e8f0',
+  borderRadius: '0.5rem',
+  focus: '#8b5cf6',
+  hover: '#f3f4f6'
+};
+
+<WhetInput
+  appearance="tokens"
+  styleTokens={purpleTheme}
+  ...
+/>
+```
+
+### Dark Theme
+
+```tsx
+// Custom dark theme
+const darkTheme = {
+  primary: '#60a5fa',
+  background: '#1f2937',
+  surface: '#374151',
+  text: '#f9fafb',
+  textSecondary: '#d1d5db',
+  border: '#4b5563',
+  borderHover: '#6b7280',
+  focus: '#60a5fa',
+  hover: '#374151',
+  borderRadius: '0.5rem'
+};
+
+<WhetInput
+  appearance="tokens"
+  styleTokens={darkTheme}
+  ...
+/>
+```
+
+### Minimal Theme
+
+```tsx
+// Clean minimal theme
+const minimalTheme = {
+  primary: '#000000',
+  background: '#ffffff',
+  text: '#000000',
+  border: '#e5e5e5',
+  borderRadius: '0',
+  focus: '#000000',
+  hover: '#f5f5f5'
+};
+
+<WhetInput
+  appearance="tokens"
+  styleTokens={minimalTheme}
+  ...
+/>
+```
+
+## Responsive Theming
+
+You can create responsive themes that adapt to different screen sizes:
+
+```tsx
+import { useMediaQuery } from 'react-responsive';
+
+function ResponsiveThemedInput() {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  const mobileTokens = {
+    primary: '#3b82f6',
+    borderRadius: '1rem',
+    nudgeChipPadding: '0.75rem 1rem'
+  };
+
+  const desktopTokens = {
+    primary: '#3b82f6',
+    borderRadius: '0.5rem',
+    nudgeChipPadding: '0.5rem 0.75rem'
+  };
+
+  return (
+    <WhetInput
+      appearance="tokens"
+      styleTokens={isMobile ? mobileTokens : desktopTokens}
+      ...
+    />
+  );
+}
+```
+
+## CSS Custom Properties
+
+WhetInput also supports CSS custom properties for theming:
+
+```css
+/* Define custom properties */
+.whet-input-theme {
+  --whet-primary: #8b5cf6;
+  --whet-background: #ffffff;
+  --whet-text: #1e293b;
+  --whet-border: #e2e8f0;
+  --whet-border-radius: 0.75rem;
+  --whet-focus: #8b5cf6;
+  --whet-hover: #f3f4f6;
+}
+
+/* Apply to container */
+.themed-container {
+  @apply whet-input-theme;
+}
+```
+
+```tsx
+// Use in your component
+<div className="themed-container">
+  <WhetInput
+    appearance="inherit"
+    ...
+  />
+</div>
+```
+
+## Theme Switching
+
+Create dynamic theme switching in your application:
+
+```tsx
+import { useState } from "react";
+import { ThemeProvider, WhetInput } from "@whetdata/input";
+
+function ThemeSwitcher() {
+  const [theme, setTheme] = useState<"light" | "dark" | "auto">("auto");
+  const [text, setText] = useState("");
+
+  const lightTokens = {
+    primary: "#3b82f6",
+    background: "#ffffff",
+    text: "#1f2937",
+    border: "#d1d5db",
+    borderRadius: "0.5rem",
+  };
+
+  const darkTokens = {
+    primary: "#60a5fa",
+    background: "#1f2937",
+    text: "#f9fafb",
+    border: "#4b5563",
+    borderRadius: "0.5rem",
+  };
+
+  return (
+    <div>
+      <div className="mb-4">
+        <label>
+          Theme:
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value as any)}
+          >
+            <option value="auto">Auto</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </div>
+
+      <ThemeProvider defaultTheme={theme}>
+        <WhetInput
+          value={text}
+          onChange={setText}
+          placeholder="Type something..."
+          target="content"
+          nudgePackId="professional_writing"
+          appearance={theme === "auto" ? "inherit" : theme}
+          styleTokens={theme === "light" ? lightTokens : darkTokens}
+        />
+      </ThemeProvider>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Choose the Right Theme Mode">
+    - Use `inherit` for most cases to respect user preferences - Use `light` or
+    `dark` when you need consistent branding - Use `tokens` for complete design
+    system integration - Use `auto` to follow system preferences automatically
+  </Accordion>
+
+  <Accordion title="Design Token Guidelines">
+    - Keep color contrast ratios accessible (WCAG AA minimum) - Use semantic
+    color names (primary, success, error) - Test themes in both light and dark
+    environments - Consider hover and focus states for interactive elements
+  </Accordion>
+
+  <Accordion title="Performance Considerations">
+    - Avoid changing theme tokens frequently - Use CSS custom properties for
+    global theme changes - Consider using ThemeProvider for app-wide theming -
+    Test theme switching performance on mobile devices
+  </Accordion>
+</AccordionGroup>
+
+## Accessibility
+
+All theme modes maintain accessibility standards:
+
+- **Color Contrast**: All themes meet WCAG AA contrast requirements
+- **Focus Indicators**: Clear focus rings for keyboard navigation
+- **High Contrast**: Support for high contrast mode
+- **Reduced Motion**: Respects `prefers-reduced-motion` settings
+
+## Browser Support
+
+Theming features are supported in all modern browsers:
+
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
+
+<Note>
+  **CSS Custom Properties**: For older browsers, consider using a polyfill for
+  CSS custom properties support.
+</Note>
