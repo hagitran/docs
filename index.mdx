@@ -1,18 +1,16 @@
 ---
-title: "Whetdata Documentation"
-description: "AI-powered input components for intelligent text processing and real-time suggestions"
+title: "Whetdata"
+description: "Text inputs from the 2030s."
 ---
 
 import { ApiKeyDemo } from "/snippets/api-key-demo.mdx";
 import { WhetInputDemo } from "/snippets/whet-input-demo.mdx";
 import { ThemeDemo } from "/snippets/theme-demo.mdx";
 
-# Welcome to Whetdata
-
-**AI-native input components** that provide intelligent text cleaning, real-time suggestions, and flexible theming. Built for developers who want to enhance user experience with minimal setup.
+**We make smart text inputs you can install in minutes.** These text inputs are enriched with smart nudges and classification offered through our API or through a drop-in component.
 
 <CardGroup cols={2}>
-  <Card title="Quick Start" icon="rocket" href="/get-started">
+  <Card title="Quick Start" icon="rocket" href="/quick-start">
     Get up and running in minutes with our step-by-step guide
   </Card>
   <Card title="API Reference" icon="code" href="/api-reference">
@@ -29,117 +27,3 @@ import { ThemeDemo } from "/snippets/theme-demo.mdx";
     Manage your API keys and view usage analytics
   </Card>
 </CardGroup>
-
-## Interactive Demo
-
-Try Whetdata's features right here in the documentation:
-
-<ApiKeyDemo />
-
-<WhetInputDemo apiKey="" />
-
-## Key Features
-
-<CardGroup cols={3}>
-  <Card title="AI-Powered" icon="sparkles">
-    Intelligent text cleaning and real-time suggestions powered by advanced AI
-  </Card>
-  <Card title="Flexible Theming" icon="palette">
-    Light/dark themes with custom token support for any design system
-  </Card>
-  <Card title="TypeScript Ready" icon="code">
-    Full type safety and IntelliSense support out of the box
-  </Card>
-  <Card title="Easy Integration" icon="plug">
-    Drop-in React components with minimal configuration required
-  </Card>
-  <Card title="Real-time Feedback" icon="bolt">
-    Live nudges and suggestions as users type
-  </Card>
-  <Card title="Accessible" icon="universal-access">
-    WCAG compliant with full keyboard navigation support
-  </Card>
-</CardGroup>
-
-## Live Theme Demo
-
-See how Whetdata adapts to different themes and design systems:
-
-<ThemeDemo apiKey="" />
-
-## Quick Integration
-
-Get started with just a few lines of code:
-
-```tsx
-import { WhetdataProvider, WhetInput } from "@whetdata/input";
-
-function MyApp() {
-  const [text, setText] = useState("");
-
-  return (
-    <WhetdataProvider
-      config={{
-        apiKey: "your-api-key-here",
-        enablePIIMasking: true,
-        enableAnalytics: true,
-      }}
-    >
-      <WhetInput
-        value={text}
-        onChange={setText}
-        placeholder="Describe your product..."
-        target="product_description"
-        nudgePackId="ecommerce_optimization"
-        goal="Create compelling product descriptions"
-      />
-    </WhetdataProvider>
-  );
-}
-```
-
-## What Makes Whetdata Special?
-
-<AccordionGroup>
-  <Accordion title="🤖 AI-Powered Intelligence">
-    Our advanced AI models analyze text in real-time, providing contextual
-    suggestions for grammar, tone, clarity, and engagement. Each suggestion
-    comes with confidence scores and actionable improvements.
-  </Accordion>
-
-{" "}
-<Accordion title="🎨 Flexible Theming System">
-  Support for light/dark themes, system preference detection, and complete
-  customization with design tokens. Perfect for any brand or design system.
-</Accordion>
-
-{" "}
-<Accordion title="⚡ Real-Time Performance">
-  Optimized for performance with intelligent debouncing, caching, and minimal
-  re-renders. Your users get instant feedback without lag.
-</Accordion>
-
-  <Accordion title="🔒 Privacy & Security">
-    Built-in PII masking, secure API communication, and compliance with data
-    protection regulations. Your users' data stays safe.
-  </Accordion>
-</AccordionGroup>
-
-## Ready to Get Started?
-
-<Steps>
-  <Step title="Create an account">
-    Sign up at [whetdata.com](https://whetdata.com) and get your API key
-  </Step>
-  <Step title="Install the package">
-    ```bash npm install @whetdata/input ```
-  </Step>
-  <Step title="Start building">
-    Follow our [Get Started guide](/get-started) for detailed integration steps
-  </Step>
-</Steps>
-
-<Note>
-  **Need help?** Join our [Discord community](https://discord.gg/whetdata) or
-  [contact support](mailto:support@whetdata.com) for assistance.
-</Note>

@@ -14,12 +14,32 @@
         "tab": "Docs",
         "groups": [
           {
-            "group": "Overview",
+            "group": "Getting started",
             "pages": [
               "index",
-              "get-started",
+              "quick-start",
               "api-reference",
               "theming"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "API documentation",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Endpoint examples",
+            "pages": [
+              "api-reference/endpoint/get",
+              "api-reference/endpoint/create",
+              "api-reference/endpoint/delete",
+              "api-reference/endpoint/webhook"
             ]
           }
         ]
