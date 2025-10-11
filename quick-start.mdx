@@ -1,72 +1,129 @@
 ---
 title: "Quick Start"
-description: "Start building with our drop in component."
+description: "Get up and running with Whet Data in minutes."
 ---
+
+<Note>
+  **Are you a Beta Tester?** Try out our [AI Wizard!](/aiwiz)
+</Note>
+
+## How It Works
+
+1. **Capture user input** — Your user types text into a form field
+2. **Send to Whet Data** — Make a request to the `/api/ult` endpoint
+3. **Receive intelligent feedback** — Get structured nudges and suggestions
+4. **Display to users** — Show the feedback in your interface
 
 import React, { useState } from "react";
 import { ApiKeyDemo } from "./snippets/api-key-demo.mdx";
 import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
 
-<Note>**In Beta** Try out our [AI Wizard!](/aiwiz)</Note>
-
 <Steps>
-  <Step title="Install the package">
-    ```bash
-    npm install @whetdata/input
-    ```
-  </Step>
-  
-  <Step title="Create an API key">
+  <Step title="Create an API Key" stepNumber={1}>
     Sign up at [whetdata.com](https://whetdata.com) and create your first API key from the dashboard.
-  </Step>
-  
-  <Step title="Add to your app">
-    ```tsx
-    import { WhetdataProvider, WhetInput } from '@whetdata/input';
     
-    function MyApp() {
-      const [text, setText] = useState('');
-      
-      return (
-        <WhetdataProvider config={{
-          apiKey: 'your-api-key-here',
-          enablePIIMasking: true,
-          enableAnalytics: true
-        }}>
-          <WhetInput
-            value={text}
-            onChange={setText}
-            placeholder="Describe your product..."
-            target="product_description"
-            nudgePackId="ecommerce_optimization"
-            goal="Create compelling product descriptions"
-          />
-        </WhetdataProvider>
-      );
+    Define your text input use case and copy the generated ruleset ID — you'll need this to configure your requests.
+  </Step>
+  <Step title="Integrate the API" stepNumber={2}>
+    <CodeGroup>
+
+    ```bash cURL
+      curl -X POST https://whetdata.com/api/ult \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer YOUR_API_KEY" \
+        -d '{
+          "action": "nudges",
+          "ruleset": "product_description",
+          "text": "Modern sneakers for daily wear",
+          "max_nudges": 3
+        }'
+    ```
+
+    
+    ```tsx TypeScript
+    export async function createNudges(text: string): Promise<any> {
+      const API_URL = "https://whetdata.com/api/ult";
+      const API_KEY = "Reference your API KEY!";
+      const ruleset = "product_description";
+      const max_nudges = 3;
+    
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`,
+          },
+          body: JSON.stringify({
+            action: "nudges",
+            ruleset,
+            text,
+            max_nudges,
+          }),
+        });
+    
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
+    
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error creating nudges:", error);
+        throw error;
+      }
     }
     ```
+
+    
+    ```python Python
+    import requests
+    
+    def create_nudges(text: str):
+        API_URL = "https://whetdata.com/api/ult"
+        API_KEY = "Reference your API KEY!"
+    
+        payload = {
+            "action": "nudges",
+            "ruleset": "product_description",
+            "text": text,
+            "max_nudges": 3
+        }
+    
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {API_KEY}"
+        }
+    
+        response = requests.post(API_URL, json=payload, headers=headers)
+    
+        if not response.ok:
+            raise Exception(f"Request failed: {response.status_code}")
+    
+        return response.json()
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Display the Nudges" stepNumber={3}>
+    Display nudges in your interface however you'd like. Check out our [Examples](/examples) for inspiration and best practices.
   </Step>
 </Steps>
 
 ## Next Steps
 
 <Steps>
-  <Step title="Explore the API reference">
-    Check out the [API documentation](/api-reference) for detailed component
-    props and methods.
+  <Step title="Explore the API Reference">
+    Review the complete [API documentation](/api-reference) for detailed endpoint specifications and advanced features.
   </Step>
-
-<Step title="Learn about theming">
-  Dive deeper into [theming options](/theming) for customizing appearance.
-</Step>
-
-  <Step title="Join the community">
-    Get help and share feedback in our [Discord
-    community](https://discord.gg/whetdata).
+  <Step title="Customize Your Integration">
+    Learn about [theming options](/theming) to match nudges with your brand's look and feel.
+  </Step>
+  <Step title="Join the Community">
+    Connect with other developers and get support in our [Discord community](https://discord.gg/whetdata).
   </Step>
 </Steps>
 
 <Note>
-  **Need help?** Check out our [FAQ](/faq) or [contact
-  support](mailto:support@whetdata.com).
+  **Need help?** Check out our [FAQ](/faq) or [contact support](mailto:support@whetdata.com).
 </Note>
