@@ -19,7 +19,7 @@ The WhetData Ult API provides powerful text processing and classification capabi
 ### Base URL
 
 ```
-https://api.whetdata.com/v1/ult
+https://whetdata.com/api/ult
 ```
 
 ### API Versioning
@@ -45,7 +45,7 @@ Include your API key in the `x-api-key` header with every request:
 <CodeGroup>
 
 ```bash cURL
-curl -X POST https://api.whetdata.com/v1/ult \
+curl -X POST https://whetdata.com/api/ult \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -59,7 +59,7 @@ curl -X POST https://api.whetdata.com/v1/ult \
 ```python Python
 import requests
 
-url = "https://api.whetdata.com/v1/ult"
+url = "https://whetdata.com/api/ult"
 headers = {
     "x-api-key": "whet_your_api_key_here",
     "Content-Type": "application/json"
@@ -76,7 +76,7 @@ print(response.json())
 
 
 ```tsx TypeScript
-const response = await fetch("https://api.whetdata.com/v1/ult", {
+const response = await fetch("https://whetdata.com/api/ult", {
   method: "POST",
   headers: {
     "x-api-key": "whet_your_api_key_here",
@@ -146,11 +146,11 @@ When you exceed the rate limit, you'll receive a `429` status code:
 
 ---
 
-Warning will be sent when appoaching rate limits.
+Warnings will be sent when approaching rate limits.
 
 ## Actions
 
-The API supports two main actions: `classification` and `nudges`.
+The API supports three main actions through the same endpoint: `classification`, `nudges`, and `clean`.
 
 ## Classification
 
@@ -158,7 +158,7 @@ Classify and validate text quality against specified rulesets. This action analy
 
 ### Request
 
-**POST** `/v1/ult`
+**POST** `/api/ult`
 
 #### Headers
 
@@ -179,7 +179,7 @@ Classify and validate text quality against specified rulesets. This action analy
 ### Request Example
 
 ```bash
-curl -X POST https://api.whetdata.com/v1/ult \
+curl -X POST https://whetdata.com/api/ult \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -243,7 +243,7 @@ Generate actionable improvement suggestions for your text. This action analyzes 
 
 ### Request
 
-**POST** `/v1/ult`
+**POST** `/api/ult`
 
 #### Headers
 
@@ -264,7 +264,7 @@ Generate actionable improvement suggestions for your text. This action analyzes 
 ### Request Example
 
 ```bash
-curl -X POST https://api.whetdata.com/v1/ult \
+curl -X POST https://whetdata.com/api/ult \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -336,11 +336,11 @@ Rulesets define the criteria used for text classification and nudge generation. 
 | `product_descriptions` | E-commerce product description optimization            | Online retail, marketplaces                      |
 | `marketing_copy`       | Marketing and advertising content                      | Ad campaigns, landing pages                      |
 | `technical_docs`       | Technical documentation standards                      | API docs, user manuals                           |
-| `revviews`             | Used to elicit insightful and honest customer reviews. | Reviewing of products, places, things, people... |
+| `reviews`              | Used to elicit insightful and honest customer reviews. | Reviewing of products, places, things, people... |
 
 ### Custom Rulesets
 
-Custome rulesets can be created on the dashboard. They will only be accessible to api keys created in the same project as the ruleset.
+Custom rulesets can be created on the dashboard. They will only be accessible to API keys created in the same project as the ruleset.
 
 ### Hybrid Rulesets
 

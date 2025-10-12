@@ -30,7 +30,7 @@ import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
     ```bash cURL
       curl -X POST https://whetdata.com/api/ult \
         -H "Content-Type: application/json" \
-        -H "Authorization: Bearer YOUR_API_KEY" \
+        -H "x-api-key: whet_your_api_key_here" \
         -d '{
           "action": "nudges",
           "ruleset": "product_description",
@@ -43,7 +43,7 @@ import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
     ```tsx TypeScript
     export async function createNudges(text: string): Promise<any> {
       const API_URL = "https://whetdata.com/api/ult";
-      const API_KEY = "Reference your API KEY!";
+      const API_KEY = "whet_your_api_key_here";
       const ruleset = "product_description";
       const max_nudges = 3;
     
@@ -52,7 +52,7 @@ import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`,
+            "x-api-key": API_KEY,
           },
           body: JSON.stringify({
             action: "nudges",
@@ -81,7 +81,7 @@ import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
     
     def create_nudges(text: str):
         API_URL = "https://whetdata.com/api/ult"
-        API_KEY = "Reference your API KEY!"
+        API_KEY = "whet_your_api_key_here"
     
         payload = {
             "action": "nudges",
@@ -92,7 +92,7 @@ import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
     
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {API_KEY}"
+            "x-api-key": API_KEY
         }
     
         response = requests.post(API_URL, json=payload, headers=headers)
