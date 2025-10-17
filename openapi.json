@@ -1,0 +1,685 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "WhetData API",
+    "description": "Text processing and validation for product descriptions and content optimization.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "WhetData Support",
+      "email": "hagi@whetdata.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://whetdata.com/api/ult",
+      "description": "Whetdata API endpoint"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/api/ult": {
+      "post": {
+        "summary": "Classification",
+        "description": "Classify inputs into defined categories.",
+        "operationId": "classifyText",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["action", "text"],
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "enum": ["classification", "nudges", "clean"],
+                    "default": "classification",
+                    "description": "Action type: classification | nudges | clean"
+                  },
+                  "ruleset": {
+                    "type": "string",
+                    "description": "Ruleset name (required for classification and nudges)",
+                    "enum": ["product", "product_description", "marketing_copy", "product_review", "technical_documentation", "date_online"],
+                    "default": "product_description"
+                  },
+                  "text": {
+                    "type": "string",
+                    "maxLength": 5000,
+                    "description": "Input text (max 5,000 characters)",
+                    "default": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality."
+                  },
+                  "threshold": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "default": 0.7,
+                    "description": "Classification threshold (0.0 to 1.0)"
+                  }
+                }
+              },
+              "examples": {
+                "classification": {
+                  "summary": "Classification",
+                  "value": {
+                    "action": "classification",
+                    "ruleset": "product_description",
+                    "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality.",
+                    "threshold": 0.8
+                  }
+                },
+                "nudges": {
+                  "summary": "Nudges",
+                  "value": {
+                    "action": "nudges",
+                    "ruleset": "product_description",
+                    "text": "This product is good and works well.",
+                    "max_nudges": 3
+                  }
+                },
+                "clean": {
+                  "summary": "Clean",
+                  "value": {
+                    "action": "clean",
+                    "text": "This is a sentance with speling and grammer erors that need to be fixed."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {"oneOf": [
+                  {"$ref": "#/components/schemas/ClassificationResponse"},
+                  {"$ref": "#/components/schemas/NudgesResponse"},
+                  {"$ref": "#/components/schemas/CleanResponse"}
+                ]}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters or malformed request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalid_params": {
+                    "summary": "Invalid Parameters",
+                    "value": {
+                      "error": "text is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalid_key": {
+                    "summary": "Invalid API Key",
+                    "value": {
+                      "error": "Unauthorized: Invalid API key"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Ruleset not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ruleset_not_found": {
+                    "summary": "Ruleset Not Found",
+                    "value": {
+                      "error": "Ruleset 'custom_ruleset' not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "rate_limit": {
+                    "summary": "Rate Limit Exceeded",
+                    "value": {
+                      "error": "Rate limit exceeded",
+                      "message": "Daily rate limit of 1000 requests exceeded",
+                      "rateLimit": {
+                        "dailyRemaining": 0,
+                        "monthlyRemaining": 28500,
+                        "resetTime": "2025-01-15T00:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Server-side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "server_error": {
+                    "summary": "Server Error",
+                    "value": {
+                      "error": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ult/nudges": {
+      "post": {
+        "summary": "Nudges",
+        "description": "Endpoint: POST /api/ult. Set action=\"nudges\" in the JSON body to generate improvement suggestions.",
+        "operationId": "generateNudges",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["action", "ruleset", "text", "max_nudges"],
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "enum": ["nudges"],
+                    "default": "nudges",
+                    "description": "Action identifier. Always \"nudges\" for this request."
+                  },
+                  "ruleset": {
+                    "type": "string",
+                    "description": "Ruleset name for analysis",
+                    "enum": ["product", "product_description", "marketing_copy", "product_review", "technical_documentation", "date_online"],
+                    "default": "product_description"
+                  },
+                  "text": {
+                    "type": "string",
+                    "maxLength": 5000,
+                    "description": "Text to improve (max 5,000 characters)",
+                    "default": "This product is good and works well."
+                  },
+                  "max_nudges": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 3,
+                    "description": "Maximum number of nudges to generate"
+                  }
+                }
+              },
+              "examples": {
+                "request": {
+                  "summary": "Nudges request",
+                  "value": {
+                    "action": "nudges",
+                    "ruleset": "product_description",
+                    "text": "This product is good and works well.",
+                    "max_nudges": 3
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful nudge generation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NudgesResponse"
+                },
+                "example": {
+                  "success": true,
+                  "action": "nudges",
+                  "ruleset": "product_description",
+                  "max_nudges": 3,
+                  "nudges": [
+                    {
+                      "type": "Technical Specifications",
+                      "suggestion": "Add specific dimensions",
+                      "priority": "high"
+                    },
+                    {
+                      "type": "Feature Benefits",
+                      "suggestion": "Highlight unique advantages",
+                      "priority": "high"
+                    },
+                    {
+                      "type": "Emotional Triggers",
+                      "suggestion": "Include lifestyle benefits",
+                      "priority": "medium"
+                    }
+                  ],
+                  "rateLimit": {
+                    "dailyRemaining": 998,
+                    "monthlyRemaining": 29998
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters or malformed request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Ruleset not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Server-side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ult/clean": {
+      "post": {
+        "summary": "Clean",
+        "description": "Endpoint: POST /api/ult. Set action=\"clean\" in the JSON body to fix spelling and grammar.",
+        "operationId": "cleanText",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["action", "text"],
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "enum": ["clean"],
+                    "default": "clean",
+                    "description": "Action identifier. Always \"clean\" for this request."
+                  },
+                  "text": {
+                    "type": "string",
+                    "maxLength": 5000,
+                    "description": "Text to fix (max 5,000 characters)",
+                    "default": "This is a sentance with speling and grammer erors that need to be fixed."
+                  }
+                }
+              },
+              "examples": {
+                "request": {
+                  "summary": "Clean request",
+                  "value": {
+                    "action": "clean",
+                    "text": "This is a sentance with speling and grammer erors that need to be fixed."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful text cleaning",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CleanResponse"
+                },
+                "example": {
+                  "success": true,
+                  "action": "clean",
+                  "original_text": "This is a sentance with speling and grammer erors that need to be fixed.",
+                  "corrected_text": "This is a sentence with spelling and grammar errors that need to be fixed.",
+                  "corrections": [
+                    {
+                      "type": "spelling",
+                      "original": "sentance",
+                      "corrected": "sentence",
+                      "position": 10
+                    },
+                    {
+                      "type": "spelling",
+                      "original": "speling",
+                      "corrected": "spelling",
+                      "position": 23
+                    },
+                    {
+                      "type": "spelling",
+                      "original": "grammer",
+                      "corrected": "grammar",
+                      "position": 35
+                    },
+                    {
+                      "type": "spelling",
+                      "original": "erors",
+                      "corrected": "errors",
+                      "position": 43
+                    }
+                  ],
+                  "total_corrections": 4,
+                  "rateLimit": {
+                    "dailyRemaining": 997,
+                    "monthlyRemaining": 29997
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid parameters or malformed request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Server-side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Your Whetdata API key. Get a free key [here](https://www.whetdata.com/dashboard)."
+      }
+    },
+    "schemas": {
+      "ClassificationResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "action": {
+            "type": "string",
+            "example": "classification"
+          },
+          "ruleset": {
+            "type": "string",
+            "example": "product_descriptions"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "valid": {
+                "type": "boolean",
+                "description": "Whether text meets quality standards"
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "description": "Confidence score for the classification"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0,
+                "description": "Quality score of the text"
+              },
+              "reason": {
+                "type": "string",
+                "description": "Explanation of the classification"
+              },
+              "threshold": {
+                "type": "number",
+                "description": "The threshold used for validation"
+              }
+            }
+          },
+          "rateLimit": {
+            "$ref": "#/components/schemas/RateLimit"
+          }
+        }
+      },
+      "NudgesResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "action": {
+            "type": "string",
+            "example": "nudges"
+          },
+          "ruleset": {
+            "type": "string",
+            "example": "product_descriptions"
+          },
+          "max_nudges": {
+            "type": "integer",
+            "example": 3
+          },
+          "nudges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Category of the nudge"
+                },
+                "suggestion": {
+                  "type": "string",
+                  "description": "Actionable improvement suggestion (2-4 words)"
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"],
+                  "description": "Priority level"
+                }
+              }
+            }
+          },
+          "rateLimit": {
+            "$ref": "#/components/schemas/RateLimit"
+          }
+        }
+      },
+      "CleanResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "action": {
+            "type": "string",
+            "example": "clean"
+          },
+          "original_text": {
+            "type": "string",
+            "description": "The original text submitted"
+          },
+          "corrected_text": {
+            "type": "string",
+            "description": "Text with all corrections applied"
+          },
+          "corrections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["spelling", "grammar"],
+                  "description": "Type of correction"
+                },
+                "original": {
+                  "type": "string",
+                  "description": "The original word/phrase"
+                },
+                "corrected": {
+                  "type": "string",
+                  "description": "The corrected word/phrase"
+                },
+                "position": {
+                  "type": "integer",
+                  "description": "Character position in the original text"
+                }
+              }
+            }
+          },
+          "total_corrections": {
+            "type": "integer",
+            "description": "Total number of corrections made"
+          },
+          "rateLimit": {
+            "$ref": "#/components/schemas/RateLimit"
+          }
+        }
+      },
+      "RateLimit": {
+        "type": "object",
+        "properties": {
+          "dailyRemaining": {
+            "type": "integer",
+            "description": "Remaining daily requests"
+          },
+          "monthlyRemaining": {
+            "type": "integer",
+            "description": "Remaining monthly requests"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error type"
+          },
+          "message": {
+            "type": "string",
+            "description": "Detailed error description"
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional context"
+          }
+        }
+      }
+    }
+  }
+}

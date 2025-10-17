@@ -1,0 +1,34 @@
+---
+title: "Security"
+description: "Security features, best practices, and compliance"
+---
+
+# Authentication
+
+- Send your key in the `x-api-key` header (format: `whet_<uuid>`)
+- Store keys in environment variables! Please don't hardcode.
+
+<Tip>Name keys by purpose e.g. `WHETDATA_REVIEW_NUDGES`</Tip>
+
+# CORS
+
+If you call the API from your own backend, you generally don’t need to change CORS. If you proxy requests through your server, set appropriate CORS headers on your server’s responses:
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: Content-Type, x-api-key
+```
+
+<Warning>
+  Avoid calling our API directly from client-side code. Keep your `x-api-key` on
+  the server and forward requests through your backend.
+</Warning>
+
+# Reporting
+
+<Info>
+  Found a security issue? Email
+  [contact@whetdata.com](mailto:contact@whetdata.com) with steps to reproduce.
+  Please avoid sharing sensitive details publicly.
+</Info>

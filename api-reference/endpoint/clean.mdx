@@ -1,0 +1,70 @@
+---
+title: "Clean"
+openapi: "POST /api/ult"
+---
+
+## Overview
+
+Automatically fix spelling and grammar errors in your text. This action analyzes your content and returns a corrected version with all spelling and grammar mistakes fixed. The endpoint is `POST /api/ult`; the request body sets `action: "clean"`.
+
+## Parameters
+
+<ParamField body="action" type="string" required>
+  Must be `"clean"`.
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Input text (max 5,000 characters).
+</ParamField>
+
+## Example
+
+```bash cURL
+curl -X POST https://whetdata.com/api/ult \
+  -H "x-api-key: whet_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "clean",
+    "text": "This is a sentance with speling and grammer erors that need to be fixed."
+  }'
+```
+
+---
+
+title: "Clean"
+openapi: "POST /api/ult"
+
+---
+
+## Overview
+
+The `clean` action automatically fixes spelling and grammar errors in your text. It returns both the corrected text and a detailed list of all corrections made.
+
+## Use This Action To
+
+- Fix spelling mistakes in product descriptions
+- Correct grammar errors in marketing copy
+- Clean up user-generated content
+- Improve text quality before publishing
+
+## Parameters
+
+<ParamField body="action" type="string" required>
+  Must be `"clean"`
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Text to fix (max 5,000 characters)
+</ParamField>
+
+## Tips
+
+<Tip>
+  The clean endpoint is perfect for preprocessing user-generated content before
+  displaying it on your site.
+</Tip>
+
+<Warning>
+  The maximum text length is 5,000 characters. For longer texts, split them into
+  chunks.
+</Warning>

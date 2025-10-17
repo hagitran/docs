@@ -1,0 +1,163 @@
+---
+title: "Error Handling"
+description: "Common errors, status codes, and troubleshooting"
+---
+
+The API uses standard HTTP status codes and returns detailed error messages for easy troubleshooting.
+
+## Status Codes
+
+| Code  | Description                                           |
+| ----- | ----------------------------------------------------- |
+| `200` | Success - Request completed successfully              |
+| `400` | Bad Request - Invalid parameters or malformed request |
+| `401` | Unauthorized - Missing or invalid API key             |
+| `404` | Not Found - Ruleset not found                         |
+| `429` | Too Many Requests - Rate limit exceeded               |
+| `500` | Internal Server Error - Server-side error             |
+
+## Error Response Format
+
+```json
+{
+  "error": "Error type",
+  "message": "Detailed error description",
+  "details": {
+    "field": "Additional context"
+  }
+}
+```
+
+## Common Errors
+
+### Invalid API Key (401)
+
+```json
+{
+  "error": "Unauthorized: Invalid API key"
+}
+```
+
+**Solution**: Check your API key in the `x-api-key` header
+
+### Missing Required Field (400)
+
+```json
+{
+  "error": "text is required"
+}
+```
+
+**Solution**: Ensure all required parameters are included
+
+### Ruleset Not Found (404)
+
+```json
+{
+  "error": "Ruleset 'custom_ruleset' not found"
+}
+```
+
+**Solution**: Check ruleset name spelling or create the ruleset in your dashboard
+
+### Input Too Long (400)
+
+```json
+{
+  "error": "Input too long: maximum 5000 characters allowed"
+}
+```
+
+**Solution**: Split your text into smaller chunks
+
+### Rate Limit Exceeded (429)
+
+```json
+{
+  "error": "Rate limit exceeded",
+  "message": "Daily rate limit of 1000 requests exceeded",
+  "rateLimit": {
+    "dailyRemaining": 0,
+    "monthlyRemaining": 28500,
+    "resetTime": "2025-01-15T00:00:00Z"
+  }
+}
+```
+
+**Solution**: Wait for reset or upgrade your plan
+
+## Error Handling Best Practices
+
+### Implement Retry Logic
+
+```javascript
+async function safeApiCall(requestData, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch("/api/ult", {
+        method: "POST",
+        headers: {
+          "x-api-key": "your-api-key",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        return await response.json();
+      }
+
+      if (response.status === 429 && attempt < maxRetries) {
+        // Exponential backoff for rate limits
+        await sleep(2 ** attempt * 1000);
+        continue;
+      }
+
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+      await sleep(1000 * attempt); // Simple backoff
+    }
+  }
+}
+```
+
+### Validate Inputs Client-Side
+
+```javascript
+function validateRequest(text, ruleset) {
+  const errors = [];
+
+  if (!text || text.trim().length === 0) {
+    errors.push("Text is required");
+  }
+
+  if (text.length > 5000) {
+    errors.push("Text exceeds maximum length of 5000 characters");
+  }
+
+  if (!ruleset) {
+    errors.push("Ruleset is required");
+  }
+
+  return errors;
+}
+```
+
+### Monitor and Alert
+
+- Set up monitoring for error rates
+- Alert on 5xx errors (server issues)
+- Track 429 errors (rate limit issues)
+- Monitor API response times
+
+## Getting Help
+
+If you encounter persistent errors:
+
+1. **Check the error message** - Most errors are self-explanatory
+2. **Verify your request format** - Ensure JSON is valid
+3. **Test with curl** - Isolate the issue
+4. **Contact support** - Include error details and request timestamp
+
+**Support**: [contact@whetdata.com](mailto:contact@whetdata.com)

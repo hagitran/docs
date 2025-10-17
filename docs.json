@@ -3,43 +3,49 @@
   "theme": "mint",
   "name": "Whetdata Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#1d4ed8",
+    "light": "#3B82F6",
+    "dark": "#1E40AF"
   },
   "favicon": "/favicon.svg",
+  "css": "./style.css",
+  "api": {
+    "playground": {
+      "display": "interactive"
+    },
+    "examples": {
+      "languages": ["curl", "python", "javascript"],
+      "defaults": "required",
+      "prefill": true
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Docs",
+        "tab": "Documentation",
         "groups": [
           {
             "group": "Getting started",
             "pages": [
-              "index",
+              "introduction",
               "quick-start",
-              "api-reference",
               "theming"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Reference",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/rulesets",
+              "api-reference/errors",
+              "api-reference/security"
+            ]
+          },
+          {
+            "group": "Actions",
+            "pages": [
+              "api-reference/endpoint/classification",
+              "api-reference/endpoint/nudges",
+              "api-reference/endpoint/clean"
             ]
           }
         ]
@@ -60,7 +66,8 @@
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://whetdata.com/dashboard"
+      "href": "https://whetdata.com/dashboard",
+      "style": "rounded-none"
     }
   },
   "contextual": {

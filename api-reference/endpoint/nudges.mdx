@@ -1,0 +1,89 @@
+---
+title: "Nudges"
+openapi: "POST /api/ult"
+---
+
+## Overview
+
+Generate actionable improvement suggestions for your text. This analyzes your content and provides specific, prioritized recommendations to enhance quality and conversion potential. The endpoint is `POST /api/ult`; the request body sets `action: "nudges"`.
+
+## Parameters
+
+<ParamField body="action" type="string" required>
+  Must be `"nudges"`.
+</ParamField>
+
+<ParamField body="ruleset" type="string" required>
+  Ruleset to use (for example `product_description`).
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Input text (max 5,000 characters).
+</ParamField>
+
+<ParamField body="max_nudges" type="number" default="3">
+  Number of suggestions to return (minimum 1).
+</ParamField>
+
+## Example
+
+```bash cURL
+curl -X POST https://whetdata.com/api/ult \
+  -H "x-api-key: whet_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "nudges",
+    "ruleset": "product_description",
+    "text": "This product is good and works well.",
+    "max_nudges": 3
+  }'
+```
+
+---
+
+title: "Nudges"
+openapi: "POST /api/ult"
+
+---
+
+## Overview
+
+The `nudges` action generates actionable improvement suggestions for your text. It analyzes your content and provides specific, prioritized recommendations to enhance quality and conversion potential.
+
+## Use This Action To
+
+- Improve existing product descriptions
+- Generate variations for A/B testing
+- Identify gaps in your content strategy
+- Learn what makes effective copy
+
+## Parameters
+
+<ParamField body="action" type="string" required>
+  Must be `"nudges"`
+</ParamField>
+
+<ParamField body="ruleset" type="string" required>
+  Ruleset name for analysis (e.g., `product_descriptions`, `marketing_copy`,
+  `technical_docs`, `reviews`)
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Text to improve (max 5,000 characters)
+</ParamField>
+
+<ParamField body="max_nudges" type="number" required>
+  Maximum number of nudges to generate (minimum: 1)
+</ParamField>
+
+## Tips
+
+<Tip>
+  Start by requesting 3-5 nudges initially. Focus on high-priority suggestions
+  first for maximum impact.
+</Tip>
+
+<Warning>
+  The maximum text length is 5,000 characters. For longer texts, split them into
+  chunks.
+</Warning>

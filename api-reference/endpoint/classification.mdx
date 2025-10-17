@@ -1,0 +1,90 @@
+---
+title: "Classification"
+openapi: "POST /api/ult"
+---
+
+## Overview
+
+Classify and validate text quality against specified rulesets. It analyzes your text and provides a quality score, validation result, and detailed reasoning. The endpoint is `POST /api/ult`; the request body sets `action: "classification"`.
+
+## Parameters
+
+<ParamField body="action" type="string" required>
+  Must be `"classification"`.
+</ParamField>
+
+<ParamField body="ruleset" type="string" required>
+  Ruleset to use (for example `product_description`).
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Input text (max 5,000 characters).
+</ParamField>
+
+<ParamField body="threshold" type="number" default="0.7">
+  Validation threshold (0.0–1.0).
+</ParamField>
+
+## Example
+
+```bash cURL
+curl -X POST https://whetdata.com/api/ult \
+  -H "x-api-key: whet_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "classification",
+    "ruleset": "product_description",
+    "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality.",
+    "threshold": 0.8
+  }'
+```
+
+---
+
+title: "Classification"
+openapi: "POST /api/ult"
+
+---
+
+## Overview
+
+The `classification` action validates text quality against specified rulesets. It analyzes your text and provides a quality score, validation result, and detailed reasoning.
+
+## Use This Action To
+
+- Validate product descriptions before publishing
+- Ensure content meets brand guidelines
+- Compare quality scores of different versions
+- Gate content publication based on scores
+
+## Parameters
+
+<ParamField body="action" type="string" required>
+  Must be `"classification"`
+</ParamField>
+
+<ParamField body="ruleset" type="string" required>
+  Ruleset name for classification (e.g., `product_descriptions`,
+  `marketing_copy`, `technical_docs`, `reviews`)
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Text to classify (max 5,000 characters)
+</ParamField>
+
+<ParamField body="threshold" type="number" default="0.7">
+  Quality threshold for validation (0.0 to 1.0). Higher values mean stricter
+  validation.
+</ParamField>
+
+## Tips
+
+<Tip>
+  Start with a threshold of 0.7 and adjust based on your quality requirements.
+  Higher thresholds mean stricter validation.
+</Tip>
+
+<Warning>
+  The maximum text length is 5,000 characters. For longer texts, split them into
+  chunks.
+</Warning>
