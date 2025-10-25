@@ -1,50 +1,74 @@
 ---
 title: "Quick Start"
-description: "Start building with our drop in component."
+description: "Get up and running with WhetData API in minutes."
 ---
 
-import React, { useState } from "react";
-import { ApiKeyDemo } from "./snippets/api-key-demo.mdx";
-import { WhetInputDemo } from "./snippets/whet-input-demo.mdx";
+## Watch the Tutorial
+
+<CardGroup cols={1}>
+  <Card title="Quick Start Video Guide" icon="play" href="YOUR_YOUTUBE_VIDEO_URL">
+    Watch our 5-minute tutorial to see the API in action and get started immediately.
+  </Card>
+</CardGroup>
+
+## Get Started in 2 Steps
 
 <Steps>
-  <Step title="Install the package">
-    ```bash
-    npm install @whetdata/input
-    ```
+  <Step title="1. Get Your API Key">
+    Sign up at [whetdata.com](https://whetdata.com/dashboard) and grab your API key from the dashboard.
   </Step>
   
-  <Step title="Create an API key">
-    Sign up at [whetdata.com](https://whetdata.com/dashboard) and create an API key if you don't already have one.
-  </Step>
-  
-  <Step title="Add to your app">
-    ```tsx
-    import { WhetdataProvider, WhetInput } from '@whetdata/input';
+  <Step title="2. Try All Features">
+    Test the endpoints to see the full power of the API:
     
-    function MyApp() {
-      const [text, setText] = useState('');
-      
-      return (
-        <WhetdataProvider config={{
-          apiKey: 'your-api-key-here',
-          enablePIIMasking: true,
-          enableAnalytics: true
-        }}>
-          <WhetInput
-            value={text}
-            onChange={setText}
-            placeholder="Describe your product..."
-            target="product_description"
-            nudgePackId="ecommerce_optimization"
-            goal="Create compelling product descriptions"
-          />
-        </WhetdataProvider>
-      );
-    }
+    **Get improvement suggestions:**
+    ```bash cURL
+    curl -X POST https://whetdata.com/api/ult \
+      -H "x-api-key: your-api-key-here" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "action": "nudges",
+        "ruleset": "product_description",
+        "text": "This product is good and works well.",
+        "max_nudges": 3
+      }'
+    ```
+    
+    **Clean spelling and grammar:**
+    ```bash cURL
+    curl -X POST https://whetdata.com/api/ult \
+      -H "x-api-key: your-api-key-here" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "action": "clean",
+        "ruleset": "product_description",
+        "text": "This is a sentance with speling and grammer erors that need to be fixed."
+      }'
     ```
   </Step>
 </Steps>
+
+## GitHub Repository
+
+<CardGroup cols={1}>
+  <Card title="View on GitHub" icon="github" href="YOUR_GITHUB_REPO_URL">
+    Check out our open-source examples and integration guides on GitHub.
+  </Card>
+</CardGroup>
+
+## API Actions
+
+Our API supports three main actions through a single endpoint:
+
+- **Classification**: Analyze text into 10 semantic categories (factual, analytical, emotive, etc.)
+- **Nudges**: Get actionable improvement suggestions with priority scoring
+- **Clean**: Fix spelling and grammar errors automatically
+
+## Next Steps
+
+- Explore our [API Reference](/api-reference/introduction) for detailed documentation
+- Check out available [Rulesets](/api-reference/rulesets) for different content types
+- Learn about [Security](/api-reference/security) and authentication
 
 <Note>
   **Need help?** Check out our [Discord](https://discord.gg/RY7ETdQgqX) or
