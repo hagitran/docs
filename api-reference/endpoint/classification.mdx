@@ -1,29 +1,52 @@
 ---
 title: "Classification"
-openapi: "POST /api/ult"
+openapi: "POST /"
 ---
 
 ## Overview
 
-Classify and validate text quality against specified rulesets. It analyzes your text and provides a quality score, validation result, and detailed reasoning. The endpoint is `POST /api/ult`; the request body sets `action: "classification"`.
+Classify text into semantic categories. It analyzes your text and provides scores across 11 categories (factual, analytical, emotive, evaluative, speculative, instructional, inquiry, persuasive, descriptive, problem, solution). Each category receives a score from 0.0 to 1.0. The endpoint is `POST /api/ult`; the request body sets `action` as an array that includes `"classification"`.
+
+## Use This Action To
+
+- Understand the semantic characteristics of your text
+- Analyze content style and tone
+- Classify documents by their primary purpose
+- Measure how descriptive, persuasive, or factual your content is
 
 ## Parameters
 
-<ParamField body="action" type="string" required>
-  Must be `"classification"`.
-</ParamField>
-
-<ParamField body="ruleset" type="string" required>
-  Ruleset to use (for example `product_description`).
+<ParamField body="action" type="array" required>
+  Must be an array that includes `"classification"`
 </ParamField>
 
 <ParamField body="text" type="string" required>
-  Input text (max 5,000 characters).
+  Text to classify (max 5,000 characters)
 </ParamField>
 
-<ParamField body="threshold" type="number" default="0.7">
-  Validation threshold (0.0–1.0).
-</ParamField>
+## Response
+
+```json
+{
+  "success": true,
+  "action": ["classification"], 
+  "result": {
+    "categories": {
+      "factual": 0.0-1.0,      // Presents facts, data, or verifiable information
+      "analytical": 0.0-1.0,   // Breaks down information, examines relationships
+      "emotive": 0.0-1.0,      // Expresses emotions, feelings, or emotional responses
+      "evaluative": 0.0-1.0,   // Makes judgments, assessments, or evaluations
+      "speculative": 0.0-1.0,  // Explores possibilities, hypotheses, or uncertain outcomes
+      "instructional": 0.0-1.0,// Provides directions, steps, or how-to guidance
+      "inquiry": 0.0-1.0,      // Asks questions, seeks information, or explores topics
+      "persuasive": 0.0-1.0,   // Attempts to convince, influence, or change opinions
+      "descriptive": 0.0-1.0,  // Describes characteristics, features, or details
+      "problem": 0.0-1.0,      // Identifies issues, challenges, or difficulties
+      "solution": 0.0-1.0      // Proposes answers, fixes, or resolutions
+    }
+  }
+}
+```
 
 ## Example
 
@@ -32,57 +55,12 @@ curl -X POST https://whetdata.com/api/ult \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
-    "action": "classification",
-    "ruleset": "product_description",
-    "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality.",
-    "threshold": 0.8
+    "action": ["classification"],
+    "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality."
   }'
 ```
 
----
-
-title: "Classification"
-openapi: "POST /api/ult"
-
----
-
-## Overview
-
-The `classification` action validates text quality against specified rulesets. It analyzes your text and provides a quality score, validation result, and detailed reasoning.
-
-## Use This Action To
-
-- Validate product descriptions before publishing
-- Ensure content meets brand guidelines
-- Compare quality scores of different versions
-- Gate content publication based on scores
-
-## Parameters
-
-<ParamField body="action" type="string" required>
-  Must be `"classification"`
-</ParamField>
-
-<ParamField body="ruleset" type="string" required>
-  Ruleset name for classification (e.g., `product_descriptions`,
-  `marketing_copy`, `technical_docs`, `reviews`)
-</ParamField>
-
-<ParamField body="text" type="string" required>
-  Text to classify (max 5,000 characters)
-</ParamField>
-
-<ParamField body="threshold" type="number" default="0.7">
-  Quality threshold for validation (0.0 to 1.0). Higher values mean stricter
-  validation.
-</ParamField>
-
 ## Tips
-
-<Tip>
-  Start with a threshold of 0.7 and adjust based on your quality requirements.
-  Higher thresholds mean stricter validation.
-</Tip>
 
 <Warning>
   The maximum text length is 5,000 characters. For longer texts, split them into
