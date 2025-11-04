@@ -3,21 +3,144 @@ title: "Security"
 description: "Security features, best practices, and compliance"
 ---
 
+import { useState, useEffect } from 'react';
+
 # Authentication
+
+Whetdata supports two authentication methods: API keys and JWT tokens.
+
+## API Key Authentication
 
 - Send your key in the `x-api-key` header (format: `whet_<uuid>`)
 - Store keys in environment variables! Please don't hardcode.
 
 <Tip>Name keys by purpose e.g. `WHETDATA_REVIEW_NUDGES`</Tip>
 
+## JWT Authentication
+
+### What is JWT?
+
+JWT (JSON Web Token) is a compact, URL-safe token format that enables fast secure authentication. Each token is created at the start of a session and will expire after 30 minutes.
+
+### How to use JWT?
+
+We suggest that when your textbox loads for each user, you create a JWT and store it in memory. Tokens are created by hitting the endpoint /token providing your api key in the header as shown:
+
+
+<CodeGroup>
+
+```javascript title="JavaScript"
+fetch('https://whetdata.com/api/token', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': 'YOUR_API_KEY'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data.token))
+.catch(error => console.error('Error:', error));
+```
+
+```python title="Python"
+import requests
+
+response = requests.post(
+    'https://whetdata.com/api/token',
+    headers={
+        'Content-Type': 'application/json',
+        'x-api-key': 'YOUR_API_KEY'
+    }
+)
+
+token = response.json()['token']
+print(token)
+```
+
+```bash title="cURL"
+curl -X POST https://whetdata.com/api/token \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+### Token Response
+
+The token endpoint returns a JSON response with the following structure:
+
+```json
+{
+  "success": true,  // Indicates if the token creation was successful
+  "token": "The token is sent here",
+  "expiresIn": 1800,  // Token expiration time in seconds (1800 = 30 minutes)
+  "projectName": "Your project's name"
+}
+```
+
+Now once you have the JWT, use it in every api request instead of API Key, as shown below.
+<CodeGroup>
+
+```javascript title="JavaScript"
+fetch('https://whetdata.com/api/nudges', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  },
+  body: JSON.stringify({
+    "text": 'Your text here',
+    "ruleset": "Your chosen ruleset here"
+    
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+```
+
+```python title="Python"
+import requests
+import json
+
+response = requests.post(
+    'https://whetdata.com/api/ult',
+    headers={
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_JWT_TOKEN'
+    },
+    data=json.dumps({
+        'text': 'Your text here',
+        'ruleset': 'Your chosen ruleset here'
+    })
+)
+
+result = response.json()
+print(result)
+```
+
+```bash title="cURL"
+curl -X POST https://whetdata.com/api/ult \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "text": "Your text here",
+    "ruleset": "Your chosen ruleset here"
+  }'
+```
+
+</CodeGroup>
+
+Note, you must put Bearer before your token. If you pass in both an Authorization and a x-api-key, first the token will be tried and if it fails the Api key will be used.
+
 # CORS
 
-If you call the API from your own backend, you generally don’t need to change CORS. If you proxy requests through your server, set appropriate CORS headers on your server’s responses:
+If you call the API from your own backend, you generally don't need to change CORS. If you proxy requests through your server, set appropriate CORS headers on your server's responses:
 
 ```
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Methods: GET, POST, OPTIONS
-Access-Control-Allow-Headers: Content-Type, x-api-key
+Access-Control-Allow-Headers: Content-Type, x-api-key, Authorization
 ```
 
 <Warning>
@@ -32,3 +155,4 @@ Access-Control-Allow-Headers: Content-Type, x-api-key
   [contact@whetdata.com](mailto:contact@whetdata.com) with steps to reproduce.
   Please avoid sharing sensitive details publicly.
 </Info>
+
