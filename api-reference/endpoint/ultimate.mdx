@@ -1,11 +1,11 @@
 ---
-title: "Classification"
-openapi: "POST /api/classification"
+title: "Ultimate"
+openapi: "POST /api/ult"
 ---
 
 ## Overview
 
-Classify text into semantic categories. It analyzes your text and provides scores across 11 categories (factual, analytical, emotive, evaluative, speculative, instructional, inquiry, persuasive, descriptive, problem, solution). Each category receives a score from 0.0 to 1.0.
+Classify text into semantic categories. It analyzes your text and provides scores across 11 categories (factual, analytical, emotive, evaluative, speculative, instructional, inquiry, persuasive, descriptive, problem, solution). Each category receives a score from 0.0 to 1.0. The endpoint is `POST /api/ult`; the request body sets `action` as an array that includes `"classification"`.
 
 ## Use This Action To
 
@@ -51,7 +51,7 @@ Classify text into semantic categories. It analyzes your text and provides score
 ## Example
 
 ```bash cURL
-curl -X POST https://whetdata.com/api/classification \
+curl -X POST https://whetdata.com/api/ult \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -63,6 +63,6 @@ curl -X POST https://whetdata.com/api/classification \
 ## Tips
 
 <Warning>
-  The maximum text length is 5,000 characters. For longer texts, split them into chunks.
+  The maximum text length is 5,000 characters. For longer texts, split them into
+  chunks.
 </Warning>
-

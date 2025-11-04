@@ -1,33 +1,11 @@
 ---
 title: "Clean"
-openapi: "POST /"
+openapi: "POST /api/clean"
 ---
 
 ## Overview
 
-Automatically fix spelling and grammar errors in your text. This action analyzes your content and returns a corrected version with all spelling and grammar mistakes fixed. The endpoint is `POST /api/ult`; the request body sets `action` as an array that includes `"clean"`.
-
-## Parameters
-
-<ParamField body="action" type="array" required>
-  Must be an array that includes `"clean"`.
-</ParamField>
-
-<ParamField body="text" type="string" required>
-  Input text (max 5,000 characters).
-</ParamField>
-
-## Example
-
-```bash cURL
-curl -X POST https://whetdata.com/api/ult \
-  -H "x-api-key: whet_your_api_key_here" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "action": ["clean"],
-    "text": "This is a sentance with speling and grammer erors that need to be fixed."
-  }'
-```
+Automatically fix spelling and grammar errors in your text. This action analyzes your content and returns a corrected version with all spelling and grammar mistakes fixed.
 
 ## Use This Action To
 
@@ -36,14 +14,51 @@ curl -X POST https://whetdata.com/api/ult \
 - Clean up user-generated content
 - Improve text quality before publishing
 
+## Parameters
+
+<ParamField body="action" type="array" required>
+  Must be an array that includes `"clean"`
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Text to fix (max 5,000 characters)
+</ParamField>
+
+<ParamField body="ruleset" type="string">
+  Ruleset name (optional)
+</ParamField>
+
+## Response
+
+```json
+{
+  "success": true,
+  "action": ["clean"],
+  "ruleset": "product_review",
+  "cleaned_text": "This is a sentence with spelling and grammar errors that need to be fixed."
+}
+```
+
+## Example
+
+```bash cURL
+curl -X POST https://whetdata.com/api/clean \
+  -H "x-api-key: whet_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": ["clean"],
+    "text": "This is a sentance with speling and grammer erors that need to be fixed.",
+    "ruleset": "product_review"
+  }'
+```
+
 ## Tips
 
 <Tip>
-  The clean endpoint is perfect for preprocessing user-generated content before
-  displaying it on your site.
+  The clean endpoint is perfect for preprocessing user-generated content before displaying it on your site.
 </Tip>
 
 <Warning>
-  The maximum text length is 5,000 characters. For longer texts, split them into
-  chunks.
+  The maximum text length is 5,000 characters. For longer texts, split them into chunks.
 </Warning>
+

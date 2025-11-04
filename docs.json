@@ -42,6 +42,7 @@
           {
             "group": "Actions",
             "pages": [
+              "api-reference/endpoint/ultimate",
               "api-reference/endpoint/classification",
               "api-reference/endpoint/nudges",
               "api-reference/endpoint/clean"

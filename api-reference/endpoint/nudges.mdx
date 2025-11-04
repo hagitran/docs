@@ -1,56 +1,78 @@
 ---
 title: "Nudges"
-openapi: "POST /"
+openapi: "POST /api/nudges"
 ---
 
 ## Overview
 
-Generate actionable improvement suggestions for your text. This analyzes your content and provides specific, prioritized recommendations to enhance quality and conversion potential. The endpoint is `POST /api/ult`; the request body sets `action` as an array that includes `"nudges"`.
+Generate actionable improvement suggestions for your text. This action analyzes your content and provides specific, prioritized recommendations to enhance quality and conversion potential.
+
+## Use This Action To
+
+- Get specific suggestions to improve your text
+- Receive prioritized recommendations
+- Enhance content quality and conversion potential
 
 ## Parameters
 
 <ParamField body="action" type="array" required>
-  Must be an array that includes `"nudges"`.
-</ParamField>
-
-<ParamField body="ruleset" type="string" required>
-  Ruleset to use (for example `product_description`).
+  Must be an array that includes `"nudges"`
 </ParamField>
 
 <ParamField body="text" type="string" required>
-  Input text (max 5,000 characters).
+  Text to improve (max 5,000 characters)
 </ParamField>
 
-<ParamField body="max_nudges" type="number" default="3">
-  Number of suggestions to return (minimum 1).
+<ParamField body="ruleset" type="string" required>
+  Ruleset name (e.g., "product_review", "product_description")
 </ParamField>
+
+<ParamField body="max_nudges" type="integer" required>
+  Maximum number of nudges to generate (minimum: 1)
+</ParamField>
+
+## Response
+
+```json
+{
+  "success": true,
+  "action": ["nudges"],
+  "ruleset": "product_review",
+  "max_nudges": 3,
+  "nudges": [
+    {
+      "type": "improvement",
+      "suggestion": "Add context to clarify what the cup is for or where it is.",
+      "priority": "0.8"
+    },
+    {
+      "type": "improvement",
+      "suggestion": "Use more descriptive language to evoke visuals or emotions.",
+      "priority": "0.7"
+    }
+  ]
+}
+```
 
 ## Example
 
 ```bash cURL
-curl -X POST https://whetdata.com/api/ult \
+curl -X POST https://whetdata.com/api/nudges \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
     "action": ["nudges"],
-    "ruleset": "product_description",
-    "text": "This product is good and works well.",
+    "text": "a dashing red cup ",
+    "ruleset": "product_review",
     "max_nudges": 3
   }'
 ```
 
-## Use This Action To
-
-- Improve existing product descriptions
-- Generate variations for A/B testing
-- Identify gaps in your content strategy
-- Learn what makes effective copy
-
 ## Tips
 
 <Tip>
-  Start by requesting 3-5 nudges initially. Focus on high-priority suggestions
-  first for maximum impact.
+  Higher priority scores (0.8-1.0) indicate more critical improvements, while
+  lower scores (0.1-0.4) are nice-to-have enhancements.
 </Tip>
 
 <Warning>

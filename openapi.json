@@ -105,7 +105,26 @@
                   {"$ref": "#/components/schemas/ClassificationResponse"},
                   {"$ref": "#/components/schemas/NudgesResponse"},
                   {"$ref": "#/components/schemas/CleanResponse"}
-                ]}
+                ]},
+                "example": {
+                  "success": true,
+                  "action": "classification",
+                  "result": {
+                    "categories": {
+                      "factual": 0.0,
+                      "analytical": 0.0,
+                      "emotive": 0.0,
+                      "evaluative": 0.0,
+                      "speculative": 0.0,
+                      "instructional": 0.0,
+                      "inquiry": 0.0,
+                      "persuasive": 0.0,
+                      "descriptive": 0.0,
+                      "problem": 0.0,
+                      "solution": 0.0
+                    }
+                  }
+                }
               }
             }
           },
