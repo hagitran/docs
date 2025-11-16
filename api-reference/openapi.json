@@ -148,18 +148,25 @@
                     "results": {
                       "classification": {
                         "categories": {
-                          "factual": 0.4,
-                          "analytical": 0.1,
-                          "emotive": 0.2,
-                          "evaluative": 0.3,
-                          "speculative": 0.0,
-                          "instructional": 0.1,
-                          "inquiry": 0.0,
-                          "persuasive": 0.6,
-                          "descriptive": 0.9,
-                          "problem": 0.0,
-                          "solution": 0.1
-                        }
+                          "sentiment_overall": 45,
+                            "is_positive": 70,
+                            "is_negative": 60,
+                            "is_neutral": 5,
+
+                            "mentions_taste": 90,
+                            "mentions_temperature": 95,
+                            "mentions_portion_size": 0,
+                            "mentions_freshness_or_quality": 20,
+
+                            "mentions_missing_items": 100,
+
+                            "is_actionable": 100,
+                            "requests_refund": 100,
+                            "reports_problem": 95,
+                            "reports_health_or_safety_issue": 0,
+
+                            "mentions_app_or_payment_issue": 0
+                          }
                       },
                       "nudges": [
                         {
@@ -219,8 +226,23 @@
                 }
               },
               "example": {
-                "action": ["classification"],
-                "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality."
+                "categories": [
+                      "sentiment_overall",
+                      "is_positive",
+                      "is_negative",
+                      "is_neutral",
+                      "mentions_taste",
+                      "mentions_temperature",
+                      "mentions_portion_size",
+                      "mentions_freshness_or_quality",
+                      "mentions_missing_items",
+                      "is_actionable",
+                      "requests_refund",
+                      "reports_problem",
+                      "reports_health_or_safety_issue",
+                      "mentions_app_or_payment_issue"
+                    ],
+                "text": "The food actually tasted really good, but it arrived completely cold and one of the dishes was missing. I’d like a refund because this was really disappointing."
               }
             }
           }
@@ -235,20 +257,26 @@
                 },
                 "example": {
                   "success": true,
-                  "action": ["classification"],
                   "result": {
                     "categories": {
-                      "factual": 0.4,
-                      "analytical": 0.1,
-                      "emotive": 0.2,
-                      "evaluative": 0.3,
-                      "speculative": 0.0,
-                      "instructional": 0.1,
-                      "inquiry": 0.0,
-                      "persuasive": 0.6,
-                      "descriptive": 0.9,
-                      "problem": 0.0,
-                      "solution": 0.1
+                     "sentiment_overall": 45,
+                      "is_positive": 70,
+                      "is_negative": 60,
+                      "is_neutral": 5,
+
+                      "mentions_taste": 90,
+                      "mentions_temperature": 95,
+                      "mentions_portion_size": 0,
+                      "mentions_freshness_or_quality": 20,
+
+                      "mentions_missing_items": 100,
+
+                      "is_actionable": 100,
+                      "requests_refund": 100,
+                      "reports_problem": 95,
+                      "reports_health_or_safety_issue": 0,
+
+                      "mentions_app_or_payment_issue": 0
                     }
                   }
                 }

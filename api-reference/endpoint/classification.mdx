@@ -5,7 +5,10 @@ openapi: "POST /api/classification"
 
 ## Overview
 
-Classify text into semantic categories. It analyzes your text and provides scores across 11 categories (factual, analytical, emotive, evaluative, speculative, instructional, inquiry, persuasive, descriptive, problem, solution). Each category receives a score from 0.0 to 1.0.
+Classify text into semantic categories. It analyzes your text and provides scores across categories. Each category receives a score from 0 - 100.
+
+## Categories
+- To use this endpoint, you either need to provide a list of categories (through the endpoint), or use a premade list (which are designed for each industry).
 
 ## Use This Action To
 
@@ -24,29 +27,6 @@ Classify text into semantic categories. It analyzes your text and provides score
   Text to classify (max 5,000 characters)
 </ParamField>
 
-## Response
-
-```json
-{
-  "success": true,
-  "action": ["classification"],
-  "result": {
-    "categories": {
-      "factual": 0.0-1.0,      // Presents facts, data, or verifiable information
-      "analytical": 0.0-1.0,   // Breaks down information, examines relationships
-      "emotive": 0.0-1.0,      // Expresses emotions, feelings, or emotional responses
-      "evaluative": 0.0-1.0,   // Makes judgments, assessments, or evaluations
-      "speculative": 0.0-1.0,  // Explores possibilities, hypotheses, or uncertain outcomes
-      "instructional": 0.0-1.0,// Provides directions, steps, or how-to guidance
-      "inquiry": 0.0-1.0,      // Asks questions, seeks information, or explores topics
-      "persuasive": 0.0-1.0,   // Attempts to convince, influence, or change opinions
-      "descriptive": 0.0-1.0,  // Describes characteristics, features, or details
-      "problem": 0.0-1.0,      // Identifies issues, challenges, or difficulties
-      "solution": 0.0-1.0      // Proposes answers, fixes, or resolutions
-    }
-  }
-}
-```
 
 ## Example
 
@@ -55,10 +35,47 @@ curl -X POST https://whetdata.com/api/classification \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
-    "action": ["classification"],
-    "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality."
+    categories = ["sentiment_overall","is_positive","is_negative","is_neutral","mentions_taste","mentions_temperature","mentions_portion_size","mentions_freshness_or_quality","mentions_missing_items","is_actionable","requests_refund","reports_problem","reports_health_or_safety_issue","mentions_app_or_payment_issue"]
+    "text": "The food actually tasted really good, but it arrived completely cold and one of the dishes was missing. I’d like a refund because this was really disappointing."
   }'
 ```
+
+
+  
+
+
+
+## Response
+
+```json
+{
+  "success": true,
+  "result": {
+    "categories": {
+    "sentiment_overall": "0-100",
+    "is_positive": "0-100",
+    "is_negative": "0-100",
+    "is_neutral": "0-100",
+
+    "mentions_taste": "0-100",
+    "mentions_temperature": "0-100",
+    "mentions_portion_size": "0-100",
+    "mentions_freshness_or_quality": "0-100",
+
+    "mentions_missing_items": "0-100",
+
+    "is_actionable": "0-100",
+    "requests_refund": "0-100",
+    "reports_problem": "0-100",
+    "reports_health_or_safety_issue": "0-100",
+
+    "mentions_app_or_payment_issue": "0-100",
+    }
+  }
+}
+```
+
+
 
 ## Tips
 
