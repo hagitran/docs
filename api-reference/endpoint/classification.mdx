@@ -35,7 +35,7 @@ curl -X POST https://whetdata.com/api/classification \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
-    categories = ["sentiment_overall","is_positive","is_negative","is_neutral","mentions_taste","mentions_temperature","mentions_portion_size","mentions_freshness_or_quality","mentions_missing_items","is_actionable","requests_refund","reports_problem","reports_health_or_safety_issue","mentions_app_or_payment_issue"]
+    "categories" = ["sentiment_overall","is_positive","is_negative","is_neutral","mentions_taste","mentions_temperature","mentions_portion_size","mentions_freshness_or_quality","mentions_missing_items","is_actionable","requests_refund","reports_problem","reports_health_or_safety_issue","mentions_app_or_payment_issue"]
     "text": "The food actually tasted really good, but it arrived completely cold and one of the dishes was missing. I’d like a refund because this was really disappointing."
   }'
 ```
