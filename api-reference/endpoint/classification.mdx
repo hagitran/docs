@@ -1,22 +1,26 @@
 ---
-title: "Classification"
-openapi: "POST /api/classification"
+title: "Classify"
+openapi: "POST /api/classify"
 ---
 
 ## Overview
 
+<<<<<<< HEAD
 Classify text into semantic categories. It analyzes your text and provides scores across categories. Each category receives a score from 0 - 100.
 
 ## Categories
 - To use this feature, you need to provide a list of categories (through the endpoint).
 - We suggest looking examples of successful criteria on the dashboard for data driven approach.
+=======
+Classify text against custom criteria. It analyzes your text and provides scores (0-100) for each specified criterion, indicating how well the text matches each criteria.
+>>>>>>> 61e6b79 (push new docs)
 
 ## Use This Action To
 
-- Understand the semantic characteristics of your text
-- Analyze content style and tone
-- Classify documents by their primary purpose
-- Measure how descriptive, persuasive, or factual your content is
+- Evaluate text against custom criteria
+- Score content based on specific attributes
+- Classify documents by custom metrics
+- Measure how well text matches defined criteria
 
 ## Parameters
 
@@ -28,14 +32,35 @@ Classify text into semantic categories. It analyzes your text and provides score
   Text to classify (max 5,000 characters)
 </ParamField>
 
+<<<<<<< HEAD
+=======
+<ParamField body="criteria" type="array" required>
+  Array of criteria names to evaluate the text against
+</ParamField>
+
+## Response
+
+```json
+{
+  "success": true,
+  "scores": {
+    "is_positive": 100,
+    "would_order_again": 100,
+    "mentions_taste": 100,
+    "is_actionable": 1
+  }
+}
+```
+>>>>>>> 61e6b79 (push new docs)
 
 ## Example
 
 ```bash cURL
-curl -X POST https://whetdata.com/api/classification \
+curl -X POST https://whetdata.com/api/classify \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
+<<<<<<< HEAD
     "categories" = ["sentiment_overall","is_positive","is_negative","is_neutral","mentions_taste","mentions_temperature","mentions_portion_size","mentions_freshness_or_quality","mentions_missing_items","is_actionable","requests_refund","reports_problem","reports_health_or_safety_issue","mentions_app_or_payment_issue"]
     "text": "The food actually tasted really good, but it arrived completely cold and one of the dishes was missing. I’d like a refund because this was really disappointing."
   }'
@@ -78,9 +103,43 @@ curl -X POST https://whetdata.com/api/classification \
 
 
 
+=======
+    "action": ["classification"],
+    "text": "I loved the rich flavor and I'\''d definitely buy this again.",
+    "criteria": ["is_positive", "would_order_again", "mentions_taste", "is_actionable"]
+  }'
+```
+
+```javascript JavaScript
+const url = "https://whetdata.com/api/classify";
+const options = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "whet_your_api_key_here",
+  },
+  body: JSON.stringify({
+    action: ["classification"],
+    text: "I loved the rich flavor and I'd definitely buy this again.",
+    criteria: [
+      "is_positive",
+      "would_order_again",
+      "mentions_taste",
+      "is_actionable",
+    ],
+  }),
+};
+
+fetch(url, options)
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+>>>>>>> 61e6b79 (push new docs)
 ## Tips
 
 <Warning>
-  The maximum text length is 5,000 characters. For longer texts, split them into chunks.
+  The maximum text length is 5,000 characters. For longer texts, split them into
+  chunks.
 </Warning>
-

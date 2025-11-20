@@ -23,8 +23,8 @@
   "paths": {
     "/": {
       "post": {
-        "summary": "Ultimate Text Processing",
-        "description": "Classify, nudge, or clean text content",
+        "summary": "[DISABLED] Ultimate Text Processing",
+        "description": "[DISABLED] Classify, nudge, or clean text content",
         "security": [
           {
             "ApiKeyAuth": []
