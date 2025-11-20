@@ -16,10 +16,6 @@ Classify text against custom criteria. It analyzes your text and provides scores
 
 ## Parameters
 
-<ParamField body="action" type="array" required>
-  Must be an array that includes `"classification"`
-</ParamField>
-
 <ParamField body="text" type="string" required>
   Text to classify (max 5,000 characters)
 </ParamField>
@@ -35,9 +31,8 @@ curl -X POST https://whetdata.com/api/classify \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
-    "action": ["classification"],
-    "text": "I loved the rich flavor and I'\''d definitely buy this again.",
-    "criteria": ["is_positive", "would_order_again", "mentions_taste", "is_actionable"]
+    "text": "This is a great product with awesome features",
+    "criteria": ["is_positive"]
   }'
 ```
 
@@ -50,14 +45,8 @@ const options = {
     "x-api-key": "whet_your_api_key_here",
   },
   body: JSON.stringify({
-    action: ["classification"],
-    text: "I loved the rich flavor and I'd definitely buy this again.",
-    criteria: [
-      "is_positive",
-      "would_order_again",
-      "mentions_taste",
-      "is_actionable",
-    ],
+    text: "This is a great product with awesome features",
+    criteria: ["is_positive"],
   }),
 };
 

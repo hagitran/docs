@@ -42,7 +42,7 @@
           {
             "group": "Actions",
             "pages": [
-              "api-reference/endpoint/classification",
+              "api-reference/endpoint/classify",
               "api-reference/endpoint/nudges",
               "api-reference/endpoint/clean"
             ]

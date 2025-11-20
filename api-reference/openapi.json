@@ -18,18 +18,12 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["action", "text", "criteria"],
+                "required": ["text", "criteria"],
                 "properties": {
-                  "action": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "enum": ["classification"]
-                    }
-                  },
                   "text": {
                     "type": "string",
-                    "description": "Text to classify"
+                    "maxLength": 5000,
+                    "description": "Text to classify (max 5,000 characters)"
                   },
                   "criteria": {
                     "type": "array",
@@ -41,9 +35,8 @@
                 }
               },
               "example": {
-                "action": ["classification"],
-                "text": "I loved the rich flavor and I'd definitely buy this again.",
-                "criteria": ["is_positive", "would_order_again", "mentions_taste", "is_actionable"]
+                "text": "This is a great product with awesome features",
+                "criteria": ["is_positive"]
               }
             }
           }
@@ -71,10 +64,91 @@
                 "example": {
                   "success": true,
                   "scores": {
-                    "is_positive": 100,
-                    "would_order_again": 100,
-                    "mentions_taste": 100,
-                    "is_actionable": 1
+                    "is_positive": 80
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/classification": {
+      "post": {
+        "summary": "Classification",
+        "description": "Classify text into semantic categories with scores across 11 categories.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["action", "text"],
+                "properties": {
+                  "action": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["classification"]
+                    }
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Text to classify"
+                  },
+                  "criteria": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of criteria names to evaluate the text against"
+                  }
+                }
+              },
+              "example": {
+                "action": ["classification"],
+                "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "scores": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "number"
+                      },
+                      "description": "Scores for each criterion (0-100)"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "action": ["classification"],
+                  "result": {
+                    "categories": {
+                      "factual": 0.4,
+                      "analytical": 0.1,
+                      "emotive": 0.2,
+                      "evaluative": 0.3,
+                      "speculative": 0.0,
+                      "instructional": 0.1,
+                      "inquiry": 0.0,
+                      "persuasive": 0.6,
+                      "descriptive": 0.9,
+                      "problem": 0.0,
+                      "solution": 0.1
+                    }
                   }
                 }
               }
