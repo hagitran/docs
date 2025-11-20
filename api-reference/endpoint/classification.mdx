@@ -5,15 +5,7 @@ openapi: "POST /api/classify"
 
 ## Overview
 
-<<<<<<< HEAD
-Classify text into semantic categories. It analyzes your text and provides scores across categories. Each category receives a score from 0 - 100.
-
-## Categories
-- To use this feature, you need to provide a list of categories (through the endpoint).
-- We suggest looking examples of successful criteria on the dashboard for data driven approach.
-=======
 Classify text against custom criteria. It analyzes your text and provides scores (0-100) for each specified criterion, indicating how well the text matches each criteria.
->>>>>>> 61e6b79 (push new docs)
 
 ## Use This Action To
 
@@ -32,26 +24,9 @@ Classify text against custom criteria. It analyzes your text and provides scores
   Text to classify (max 5,000 characters)
 </ParamField>
 
-<<<<<<< HEAD
-=======
 <ParamField body="criteria" type="array" required>
   Array of criteria names to evaluate the text against
 </ParamField>
-
-## Response
-
-```json
-{
-  "success": true,
-  "scores": {
-    "is_positive": 100,
-    "would_order_again": 100,
-    "mentions_taste": 100,
-    "is_actionable": 1
-  }
-}
-```
->>>>>>> 61e6b79 (push new docs)
 
 ## Example
 
@@ -60,50 +35,6 @@ curl -X POST https://whetdata.com/api/classify \
   -H "x-api-key: whet_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
-<<<<<<< HEAD
-    "categories" = ["sentiment_overall","is_positive","is_negative","is_neutral","mentions_taste","mentions_temperature","mentions_portion_size","mentions_freshness_or_quality","mentions_missing_items","is_actionable","requests_refund","reports_problem","reports_health_or_safety_issue","mentions_app_or_payment_issue"]
-    "text": "The food actually tasted really good, but it arrived completely cold and one of the dishes was missing. I’d like a refund because this was really disappointing."
-  }'
-```
-
-
-  
-
-
-
-## Response
-
-```json
-{
-  "success": true,
-  "result": {
-    "categories": {
-    "sentiment_overall": "0-100",
-    "is_positive": "0-100",
-    "is_negative": "0-100",
-    "is_neutral": "0-100",
-
-    "mentions_taste": "0-100",
-    "mentions_temperature": "0-100",
-    "mentions_portion_size": "0-100",
-    "mentions_freshness_or_quality": "0-100",
-
-    "mentions_missing_items": "0-100",
-
-    "is_actionable": "0-100",
-    "requests_refund": "0-100",
-    "reports_problem": "0-100",
-    "reports_health_or_safety_issue": "0-100",
-
-    "mentions_app_or_payment_issue": "0-100",
-    }
-  }
-}
-```
-
-
-
-=======
     "action": ["classification"],
     "text": "I loved the rich flavor and I'\''d definitely buy this again.",
     "criteria": ["is_positive", "would_order_again", "mentions_taste", "is_actionable"]
@@ -136,7 +67,20 @@ fetch(url, options)
   .catch((error) => console.error("Error:", error));
 ```
 
->>>>>>> 61e6b79 (push new docs)
+## Response
+
+```json
+{
+  "success": true,
+  "scores": {
+    "is_positive": 100,
+    "would_order_again": 100,
+    "mentions_taste": 100,
+    "is_actionable": 1
+  }
+}
+```
+
 ## Tips
 
 <Warning>

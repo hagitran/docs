@@ -18,192 +18,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["action", "text"],
-                "properties": {
-                  "action": {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "enum": ["classification", "nudges", "clean"]
-                    },
-                    "description": "Array of operations to execute in parallel. Supports: classification, nudges, clean"
-                  },
-                  "ruleset": {
-                    "type": "string",
-                    "description": "Ruleset name (required for nudges and clean operations)"
-                  },
-                  "text": {
-                    "type": "string",
-                    "maxLength": 5000,
-                    "description": "Input text to process (max 5,000 characters)"
-                  },
-                  "max_nudges": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "description": "Maximum number of nudges to generate (required for nudges action)"
-                  }
-                }
-              },
-              "examples": {
-                "multi_action": {
-                  "summary": "Batch two actions",
-                  "value": {
-                    "action": ["classification", "nudges"],
-                    "text": "Premium wireless headphones with active noise cancellation and 30-hour battery life.",
-                    "ruleset": "product_review",
-                    "max_nudges": 3
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success - Returns combined results from all requested operations",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Overall success status"
-                    },
-                    "results": {
-                      "type": "object",
-                      "description": "Combined results from all executed operations",
-                      "properties": {
-                        "classification": {
-                          "type": "object",
-                          "description": "Classification results (if classification was requested)",
-                          "properties": {
-                            "categories": {
-                              "type": "object",
-                              "additionalProperties": {
-                                "type": "number"
-                              }
-                            }
-                          }
-                        },
-                        "nudges": {
-                          "type": "array",
-                          "description": "Nudge suggestions (if nudges was requested)",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "type": { "type": "string" },
-                              "suggestion": { "type": "string" },
-                              "priority": { "type": "string" }
-                            }
-                          }
-                        },
-                        "clean": {
-                          "type": "object",
-                          "description": "Clean results (if clean was requested)",
-                          "properties": {
-                            "cleaned_text": { "type": "string" }
-                          }
-                        }
-                      }
-                    },
-                    "errors": {
-                      "type": "object",
-                      "description": "Errors for individual operations that failed",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    },
-                    "warnings": {
-                      "type": "array",
-                      "description": "Warning messages (e.g., fallback ruleset usage)",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "timings": {
-                      "type": "object",
-                      "description": "Individual operation timings in milliseconds",
-                      "additionalProperties": {
-                        "type": "number"
-                      }
-                    },
-                    "timing": {
-                      "type": "object",
-                      "description": "Overall request timing breakdown",
-                      "properties": {
-                        "apiKeyValidation": { "type": "number" },
-                        "rateLimitCheck": { "type": "number" },
-                        "bodyParsing": { "type": "number" },
-                        "actionProcessing": { "type": "number" },
-                        "total": { "type": "number" }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "summary": "Batch response",
-                  "value": {
-                    "success": true,
-                    "results": {
-                      "classification": {
-                        "categories": {
-                          "factual": 0.4,
-                          "analytical": 0.1,
-                          "emotive": 0.2,
-                          "evaluative": 0.3,
-                          "speculative": 0.0,
-                          "instructional": 0.1,
-                          "inquiry": 0.0,
-                          "persuasive": 0.6,
-                          "descriptive": 0.9,
-                          "problem": 0.0,
-                          "solution": 0.1
-                        }
-                      },
-                      "nudges": [
-                        {
-                          "type": "improvement",
-                          "suggestion": "Add specific technical details",
-                          "priority": "0.8"
-                        },
-                        {
-                          "type": "improvement",
-                          "suggestion": "Highlight unique selling points",
-                          "priority": "0.7"
-                        }
-                      ]
-                    },
-                    "timings": {
-                      "classification": 450,
-                      "nudges": 997
-                    },
-                    "timing": {
-                      "apiKeyValidation": 435,
-                      "rateLimitCheck": 427,
-                      "bodyParsing": 1,
-                      "actionProcessing": 997,
-                      "total": 1861
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/classification": {
-      "post": {
-        "summary": "Classification",
-        "description": "Classify text into semantic categories with scores across 11 categories.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["action", "text"],
+                "required": ["action", "text", "criteria"],
                 "properties": {
                   "action": {
                     "type": "array",
@@ -227,7 +42,8 @@
               },
               "example": {
                 "action": ["classification"],
-                "text": "Premium wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear audio quality."
+                "text": "I loved the rich flavor and I'd definitely buy this again.",
+                "criteria": ["is_positive", "would_order_again", "mentions_taste", "is_actionable"]
               }
             }
           }
@@ -254,21 +70,11 @@
                 },
                 "example": {
                   "success": true,
-                  "action": ["classification"],
-                  "result": {
-                    "categories": {
-                      "factual": 0.4,
-                      "analytical": 0.1,
-                      "emotive": 0.2,
-                      "evaluative": 0.3,
-                      "speculative": 0.0,
-                      "instructional": 0.1,
-                      "inquiry": 0.0,
-                      "persuasive": 0.6,
-                      "descriptive": 0.9,
-                      "problem": 0.0,
-                      "solution": 0.1
-                    }
+                  "scores": {
+                    "is_positive": 100,
+                    "would_order_again": 100,
+                    "mentions_taste": 100,
+                    "is_actionable": 1
                   }
                 }
               }
